@@ -3,2391 +3,1011 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Schedule I Pro - Ultimate Mixing Station</title>
+    <title>Biología Celular 2° Medio - Guía de Estudio Interactiva</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        * { font-family: 'Inter', sans-serif; }
-        .mono { font-family: 'JetBrains Mono', monospace; }
+        :root {
+            --primary: #0d9488;
+            --secondary: #14b8a6;
+            --accent: #f59e0b;
+            --bg-dark: #0f172a;
+            --bg-light: #f0fdf4;
+        }
         
-        body { 
-            background: #050508;
-            min-height: 100vh;
-            overflow-x: hidden;
+        * {
+            font-family: 'Inter', sans-serif;
         }
-
-        /* Animated background */
-        .bg-grid {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            pointer-events: none;
-            z-index: 0;
+        
+        h1, h2, h3, .brand {
+            font-family: 'Space Grotesk', sans-serif;
         }
-
-        .bg-glow {
-            position: fixed;
-            width: 600px;
-            height: 600px;
-            border-radius: 50%;
-            filter: blur(100px);
-            opacity: 0.15;
-            pointer-events: none;
-            z-index: 0;
-            animation: float 20s infinite ease-in-out;
-        }
-
-        .glow-1 { top: -200px; left: -200px; background: #6366f1; animation-delay: 0s; }
-        .glow-2 { bottom: -200px; right: -200px; background: #a855f7; animation-delay: -10s; }
-        .glow-3 { top: 50%; left: 50%; transform: translate(-50%, -50%); background: #ec4899; animation-delay: -5s; }
-
+        
+        /* Animaciones */
         @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -30px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
         }
-
-        .glass { 
-            background: rgba(20, 20, 25, 0.7); 
-            backdrop-filter: blur(20px); 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5); 
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(13, 148, 136, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(13, 148, 136, 0.6); }
         }
-
-        .glass-card { 
-            background: linear-gradient(135deg, rgba(30,30,35,0.8) 0%, rgba(20,20,25,0.6) 100%); 
-            backdrop-filter: blur(20px); 
-            border: 1px solid rgba(255,255,255,0.06); 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-            position: relative;
-            overflow: hidden;
-        }
-
-        .glass-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-            transition: left 0.5s;
-        }
-
-        .glass-card:hover::before {
-            left: 100%;
-        }
-
-        .glass-card:hover { 
-            transform: translateY(-4px) scale(1.01); 
-            border-color: rgba(99, 102, 241, 0.3); 
-            box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.2); 
-        }
-
-        .gradient-text { 
-            background: linear-gradient(135deg, #818cf8 0%, #c084fc 50%, #f472b6 100%); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            background-clip: text; 
-        }
-
-        .profit-gold { 
-            color: #fbbf24; 
-            text-shadow: 0 0 20px rgba(251, 191, 36, 0.3); 
-        }
-
-        .tab-active { 
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%); 
-            border: 1px solid rgba(99, 102, 241, 0.4); 
-            color: white; 
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.2); 
-        }
-
-        .tab-inactive { 
-            background: rgba(255, 255, 255, 0.03); 
-            border: 1px solid rgba(255, 255, 255, 0.06); 
-            color: rgba(255, 255, 255, 0.5); 
-        }
-
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); border-radius: 3px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 3px; }
-
-        .recipe-card {
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+        
+        @keyframes slide-up {
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        .ingredient-tag {
-            animation: slideIn 0.3s ease-out;
+        
+        @keyframes organelle-float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(5px, -5px) rotate(1deg); }
+            50% { transform: translate(0, -10px) rotate(0deg); }
+            75% { transform: translate(-5px, -5px) rotate(-1deg); }
         }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-10px); }
-            to { opacity: 1; transform: translateX(0); }
+        
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+        .animate-slide-up { animation: slide-up 0.6s ease-out forwards; }
+        .organelle { animation: organelle-float 8s ease-in-out infinite; }
+        
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-
-        .stat-counter {
-            animation: countUp 0.5s ease-out;
+        
+        .dark .glass {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-
-        .pulse-ring {
-            position: absolute;
-            border-radius: 50%;
-            border: 2px solid rgba(99, 102, 241, 0.5);
-            animation: pulse 2s infinite;
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(1.5); opacity: 0; }
-        }
-
-        .difficulty-easy { color: #4ade80; border-color: rgba(74, 222, 128, 0.3); background: rgba(74, 222, 128, 0.1); }
-        .difficulty-medium { color: #fbbf24; border-color: rgba(251, 191, 36, 0.3); background: rgba(251, 191, 36, 0.1); }
-        .difficulty-hard { color: #f87171; border-color: rgba(248, 113, 113, 0.3); background: rgba(248, 113, 113, 0.1); }
-        .difficulty-expert { color: #a78bfa; border-color: rgba(167, 139, 250, 0.3); background: rgba(167, 139, 250, 0.1); }
-
-        .type-weed { border-left: 3px solid #22c55e; }
-        .type-meth { border-left: 3px solid #3b82f6; }
-        .type-cocaine { border-left: 3px solid #eab308; }
-        .type-shrooms { border-left: 3px solid #a855f7; }
-
-        .btn-shine {
-            position: relative;
-            overflow: hidden;
-        }
-        .btn-shine::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: rotate(45deg);
-            transition: all 0.5s;
-            opacity: 0;
-        }
-        .btn-shine:hover::after {
-            animation: shine 0.5s ease-in-out;
-        }
-        @keyframes shine {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
-        }
-
-        .tooltip {
-            position: relative;
-        }
-        .tooltip:hover::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 6px 12px;
-            background: rgba(0,0,0,0.9);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 6px;
-            font-size: 12px;
-            white-space: nowrap;
-            z-index: 50;
-            margin-bottom: 8px;
-        }
-
-        .loading-skeleton {
-            background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-        }
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-
-        .effect-badge {
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 12px;
-            border: 1px solid;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .rank-badge {
-            background: linear-gradient(135deg, rgba(234, 179, 8, 0.2), rgba(234, 179, 8, 0.05));
-            border: 1px solid rgba(234, 179, 8, 0.3);
-            color: #fbbf24;
-        }
-
-        /* Custom range slider */
-        input[type=range] {
-            -webkit-appearance: none;
+        ::-webkit-scrollbar-track {
             background: transparent;
         }
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            height: 16px;
-            width: 16px;
-            border-radius: 50%;
-            background: #6366f1;
-            cursor: pointer;
-            margin-top: -6px;
-            box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
         }
-        input[type=range]::-webkit-slider-runnable-track {
-            width: 100%;
-            height: 4px;
+        
+        /* Flip Card */
+        .flip-card {
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+        
+        /* Progress Ring */
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.35s;
+        }
+        
+        /* Cell Diagram Interactive */
+        .cell-part {
             cursor: pointer;
-            background: rgba(255,255,255,0.1);
-            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        .cell-part:hover {
+            filter: brightness(1.2) drop-shadow(0 0 10px currentColor);
+            transform: scale(1.02);
+        }
+        
+        /* Typing Effect */
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, #0d9488 0%, #14b8a6 50%, #f59e0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Tab Active State */
+        .tab-active {
+            background: linear-gradient(135deg, #0d9488, #14b8a6);
+            color: white;
+        }
+        
+        /* Quiz Option */
+        .quiz-option {
+            transition: all 0.2s ease;
+        }
+        .quiz-option:hover {
+            transform: translateX(5px);
+            background: rgba(13, 148, 136, 0.1);
+        }
+        .quiz-option.correct {
+            background: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
+        .quiz-option.incorrect {
+            background: #ef4444;
+            color: white;
+            border-color: #ef4444;
+        }
+        
+        /* Dark Mode Transitions */
+        body {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        /* Floating Particles Background */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 15s infinite;
         }
     </style>
 </head>
-<body class="text-gray-100 font-sans antialiased">
-    <!-- Background Effects -->
-    <div class="bg-grid"></div>
-    <div class="bg-glow glow-1"></div>
-    <div class="bg-glow glow-2"></div>
-    <div class="bg-glow glow-3"></div>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-300 overflow-x-hidden">
 
-    <!-- NAVEGACIÓN -->
-    <nav class="fixed top-0 w-full z-50 glass border-b border-white/10">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass border-b border-slate-200 dark:border-slate-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center relative overflow-hidden">
-                        <div class="pulse-ring absolute inset-0"></div>
-                        <i class="fas fa-flask text-white text-lg relative z-10"></i>
-                    </div>
-                    <div>
-                        <h1 class="text-xl font-bold gradient-text tracking-tight">Schedule I Pro</h1>
-                        <p class="text-xs text-gray-500 flex items-center gap-1">
-                            <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                            Ultimate Mixing Station v4.0
-                        </p>
-                    </div>
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="microscope" class="w-8 h-8 text-teal-600 dark:text-teal-400"></i>
+                    <span class="brand text-xl font-bold gradient-text">BioCell 2°M</span>
                 </div>
-                
-                <div class="hidden md:flex items-center gap-1 bg-black/20 p-1 rounded-xl">
-                    <button onclick="showSection('dashboard')" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all tab-active flex items-center gap-2" data-section="dashboard">
-                        <i class="fas fa-chart-pie"></i>
-                        <span>Dashboard</span>
-                    </button>
-                    <button onclick="showSection('recipes')" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all tab-inactive flex items-center gap-2" data-section="recipes">
-                        <i class="fas fa-book"></i>
-                        <span>Recetas</span>
-                        <span class="ml-1 bg-indigo-500/30 px-2 py-0.5 rounded-full text-xs font-mono">52</span>
-                    </button>
-                    <button onclick="showSection('calculator')" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all tab-inactive flex items-center gap-2" data-section="calculator">
-                        <i class="fas fa-calculator"></i>
-                        <span>Calculadora</span>
-                    </button>
-                    <button onclick="showSection('optimizer')" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all tab-inactive flex items-center gap-2" data-section="optimizer">
-                        <i class="fas fa-robot"></i>
-                        <span>Bot</span>
-                    </button>
-                    <button onclick="showSection('lab')" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all tab-inactive flex items-center gap-2" data-section="lab">
-                        <i class="fas fa-vial"></i>
-                        <span>Laboratorio</span>
+                <div class="hidden md:flex items-center gap-6">
+                    <button onclick="showSection('study')" class="nav-btn hover:text-teal-600 dark:hover:text-teal-400 transition-colors font-medium">Estudiar</button>
+                    <button onclick="showSection('practice')" class="nav-btn hover:text-teal-600 dark:hover:text-teal-400 transition-colors font-medium">Practicar</button>
+                    <button onclick="showSection('compare')" class="nav-btn hover:text-teal-600 dark:hover:text-teal-400 transition-colors font-medium">Comparar</button>
+                    <button onclick="showSection('quiz')" class="nav-btn hover:text-teal-600 dark:hover:text-teal-400 transition-colors font-medium">Quiz</button>
+                    <button onclick="toggleTheme()" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                        <i data-lucide="moon" class="w-5 h-5 hidden dark:block"></i>
+                        <i data-lucide="sun" class="w-5 h-5 block dark:hidden"></i>
                     </button>
                 </div>
-
-                <div class="flex items-center gap-3">
-                    <button onclick="toggleTheme()" class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all tooltip" data-tooltip="Cambiar tema">
-                        <i class="fas fa-moon text-gray-400"></i>
-                    </button>
-                    <button onclick="exportData()" class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all tooltip" data-tooltip="Exportar datos">
-                        <i class="fas fa-download text-gray-400"></i>
-                    </button>
-                </div>
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass border-t border-slate-200 dark:border-slate-700">
+            <div class="px-4 pt-2 pb-4 space-y-2">
+                <button onclick="showSection('study'); toggleMobileMenu()" class="block w-full text-left py-2 px-4 rounded hover:bg-slate-200 dark:hover:bg-slate-700">Estudiar</button>
+                <button onclick="showSection('practice'); toggleMobileMenu()" class="block w-full text-left py-2 px-4 rounded hover:bg-slate-200 dark:hover:bg-slate-700">Practicar</button>
+                <button onclick="showSection('compare'); toggleMobileMenu()" class="block w-full text-left py-2 px-4 rounded hover:bg-slate-200 dark:hover:bg-slate-700">Comparar</button>
+                <button onclick="showSection('quiz'); toggleMobileMenu()" class="block w-full text-left py-2 px-4 rounded hover:bg-slate-200 dark:hover:bg-slate-700">Quiz</button>
             </div>
         </div>
     </nav>
 
-    <!-- CONTENIDO PRINCIPAL -->
-    <main class="pt-24 pb-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-10">
-
-        <!-- DASHBOARD -->
-        <section id="section-dashboard" class="space-y-6">
-            <!-- Stats Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                <div class="glass-card rounded-2xl p-6 relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-500/10 rounded-full blur-3xl group-hover:bg-yellow-500/20 transition-all"></div>
-                    <div class="flex items-center justify-between mb-2 relative z-10">
-                        <span class="text-gray-400 text-sm font-medium">Mejor Ganancia</span>
-                        <div class="w-10 h-10 rounded-xl bg-yellow-500/20 flex items-center justify-center">
-                            <i class="fas fa-crown text-yellow-400 text-xl"></i>
-                        </div>
-                    </div>
-                    <div class="text-3xl font-bold profit-gold mono stat-counter" id="best-profit">$565</div>
-                    <div class="text-xs text-gray-500 mt-1 flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 rounded-full bg-yellow-500"></span>
-                        Cocaine MEGA
-                    </div>
+    <!-- Hero Section -->
+    <section id="hero" class="pt-24 pb-12 px-4 sm:px-6 lg:px-8 min-h-screen flex items-center relative overflow-hidden">
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="particle w-4 h-4 bg-teal-400 top-20 left-10" style="animation-delay: 0s;"></div>
+            <div class="particle w-6 h-6 bg-amber-400 top-40 right-20" style="animation-delay: 2s;"></div>
+            <div class="particle w-3 h-3 bg-emerald-400 bottom-20 left-1/4" style="animation-delay: 4s;"></div>
+            <div class="particle w-5 h-5 bg-cyan-400 top-1/3 right-1/3" style="animation-delay: 6s;"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-12 items-center">
+            <div class="animate-slide-up">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 text-sm font-medium mb-6">
+                    <i data-lucide="book-open" class="w-4 h-4"></i>
+                    <span>2° Medio - Biología</span>
                 </div>
-
-                <div class="glass-card rounded-2xl p-6 relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-green-500/10 rounded-full blur-3xl group-hover:bg-green-500/20 transition-all"></div>
-                    <div class="flex items-center justify-between mb-2 relative z-10">
-                        <span class="text-gray-400 text-sm font-medium">Recetas Verificadas</span>
-                        <div class="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center">
-                            <i class="fas fa-check-circle text-green-400 text-xl"></i>
-                        </div>
-                    </div>
-                    <div class="text-3xl font-bold text-white mono stat-counter" id="total-recipes">52</div>
-                    <div class="text-xs text-gray-500 mt-1 flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                        100% testeadas
-                    </div>
-                </div>
-
-                <div class="glass-card rounded-2xl p-6 relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-3xl group-hover:bg-indigo-500/20 transition-all"></div>
-                    <div class="flex items-center justify-between mb-2 relative z-10">
-                        <span class="text-gray-400 text-sm font-medium">Ganancia Promedio</span>
-                        <div class="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center">
-                            <i class="fas fa-chart-line text-indigo-400 text-xl"></i>
-                        </div>
-                    </div>
-                    <div class="text-3xl font-bold text-indigo-400 mono stat-counter" id="avg-profit">$142</div>
-                    <div class="text-xs text-gray-500 mt-1 flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
-                        Por receta
-                    </div>
-                </div>
-
-                <div class="glass-card rounded-2xl p-6 relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl group-hover:bg-purple-500/20 transition-all"></div>
-                    <div class="flex items-center justify-between mb-2 relative z-10">
-                        <span class="text-gray-400 text-sm font-medium">Rangos Disponibles</span>
-                        <div class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
-                            <i class="fas fa-layer-group text-purple-400 text-xl"></i>
-                        </div>
-                    </div>
-                    <div class="text-3xl font-bold text-purple-400 mono">12</div>
-                    <div class="text-xs text-gray-500 mt-1 flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
-                        Desde Street Rat
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Access -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                <button onclick="showSection('recipes'); filterRecipes('early');" class="glass-card rounded-2xl p-6 text-left hover:border-green-500/50 transition-all group btn-shine">
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-green-500/20 to-green-600/10 flex items-center justify-center border border-green-500/20 group-hover:scale-110 transition-transform">
-                            <i class="fas fa-seedling text-green-400 text-2xl"></i>
-                        </div>
-                        <span class="text-xs text-green-400 bg-green-500/10 px-2 py-1 rounded-full border border-green-500/20">18 recetas</span>
-                    </div>
-                    <h3 class="text-lg font-semibold mb-1 group-hover:text-green-400 transition-colors">Early Game</h3>
-                    <p class="text-sm text-gray-400 mb-3">Hoodlum I-V • OG Kush, Sour Diesel</p>
-                    <div class="flex items-center gap-2 text-xs text-gray-500">
-                        <i class="fas fa-arrow-right text-green-500"></i>
-                        <span>Ver recetas</span>
-                    </div>
-                </button>
-
-                <button onclick="showSection('recipes'); filterRecipes('mid');" class="glass-card rounded-2xl p-6 text-left hover:border-blue-500/50 transition-all group btn-shine">
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500/20 to-blue-600/10 flex items-center justify-center border border-blue-500/20 group-hover:scale-110 transition-transform">
-                            <i class="fas fa-flask text-blue-400 text-2xl"></i>
-                        </div>
-                        <span class="text-xs text-blue-400 bg-blue-500/10 px-2 py-1 rounded-full border border-blue-500/20">15 recetas</span>
-                    </div>
-                    <h3 class="text-lg font-semibold mb-1 group-hover:text-blue-400 transition-colors">Mid Game</h3>
-                    <p class="text-sm text-gray-400 mb-3">Peddler I-V • Meth, Shrooms</p>
-                    <div class="flex items-center gap-2 text-xs text-gray-500">
-                        <i class="fas fa-arrow-right text-blue-500"></i>
-                        <span>Ver recetas</span>
-                    </div>
-                </button>
-
-                <button onclick="showSection('recipes'); filterRecipes('late');" class="glass-card rounded-2xl p-6 text-left hover:border-purple-500/50 transition-all group btn-shine">
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/20 to-purple-600/10 flex items-center justify-center border border-purple-500/20 group-hover:scale-110 transition-transform">
-                            <i class="fas fa-crown text-purple-400 text-2xl"></i>
-                        </div>
-                        <span class="text-xs text-purple-400 bg-purple-500/10 px-2 py-1 rounded-full border border-purple-500/20">19 recetas</span>
-                    </div>
-                    <h3 class="text-lg font-semibold mb-1 group-hover:text-purple-400 transition-colors">Late Game</h3>
-                    <p class="text-sm text-gray-400 mb-3">Hustler I-III • Cocaine Premium</p>
-                    <div class="flex items-center gap-2 text-xs text-gray-500">
-                        <i class="fas fa-arrow-right text-purple-500"></i>
-                        <span>Ver recetas</span>
-                    </div>
-                </button>
-            </div>
-
-            <!-- Charts & Analytics -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="glass-card rounded-2xl p-6 lg:col-span-2">
-                    <div class="flex items-center justify-between mb-6">
-                        <div>
-                            <h3 class="text-lg font-semibold">Rentabilidad por Producto</h3>
-                            <p class="text-sm text-gray-400">Comparativa de ganancias máximas</p>
-                        </div>
-                        <select class="bg-black/30 border border-white/10 rounded-lg px-3 py-1 text-sm focus:outline-none focus:border-indigo-500">
-                            <option>Todas las recetas</option>
-                            <option>Solo favoritas</option>
-                            <option>Por rango</option>
-                        </select>
-                    </div>
-                    <canvas id="profitChart" height="120"></canvas>
-                </div>
-
-                <div class="space-y-4">
-                    <div class="glass-card rounded-2xl p-6">
-                        <h3 class="text-lg font-semibold mb-4">Top Efectos</h3>
-                        <div class="space-y-3">
-                            <div class="flex items-center justify-between p-3 rounded-xl bg-white/5">
-                                <div class="flex items-center gap-3">
-                                    <span class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-xs">1</span>
-                                    <span class="text-sm">Anti-Gravity</span>
-                                </div>
-                                <span class="text-xs text-gray-400">+54%</span>
-                            </div>
-                            <div class="flex items-center justify-between p-3 rounded-xl bg-white/5">
-                                <div class="flex items-center gap-3">
-                                    <span class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-xs">2</span>
-                                    <span class="text-sm">Zombifying</span>
-                                </div>
-                                <span class="text-xs text-gray-400">+58%</span>
-                            </div>
-                            <div class="flex items-center justify-between p-3 rounded-xl bg-white/5">
-                                <div class="flex items-center gap-3">
-                                    <span class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-xs">3</span>
-                                    <span class="text-sm">Cyclopean</span>
-                                </div>
-                                <span class="text-xs text-gray-400">+56%</span>
-                            </div>
-                            <div class="flex items-center justify-between p-3 rounded-xl bg-white/5">
-                                <div class="flex items-center gap-3">
-                                    <span class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-xs">4</span>
-                                    <span class="text-sm">Glowing</span>
-                                </div>
-                                <span class="text-xs text-gray-400">+48%</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="glass-card rounded-2xl p-6 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 border-indigo-500/20">
-                        <div class="flex items-center gap-3 mb-3">
-                            <i class="fas fa-lightbulb text-yellow-400"></i>
-                            <span class="font-semibold text-sm">Pro Tip</span>
-                        </div>
-                        <p class="text-sm text-gray-300 leading-relaxed">
-                            Las recetas con <span class="text-indigo-400">8 efectos</span> maximizan la adicción al 100%, permitiéndote cobrar precios premium a clientes habituales.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recent Activity -->
-            <div class="glass-card rounded-2xl p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-semibold">Actividad Reciente</h3>
-                    <button class="text-sm text-indigo-400 hover:text-indigo-300">Ver todo</button>
-                </div>
-                <div class="space-y-3" id="recent-activity">
-                    <!-- Se llena con JS -->
-                </div>
-            </div>
-        </section>
-
-        <!-- RECETAS -->
-        <section id="section-recipes" class="hidden space-y-6">
-            <!-- Filters -->
-            <div class="glass-card rounded-2xl p-6 sticky top-20 z-40 border-indigo-500/20">
-                <div class="flex flex-col md:flex-row gap-4 mb-4">
-                    <div class="flex-1 relative">
-                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                        <input type="text" id="search-input" placeholder="Buscar receta, ingrediente o efecto..." 
-                               class="w-full pl-12 pr-4 py-3 rounded-xl bg-black/30 border border-white/10 focus:border-indigo-500 focus:outline-none transition-all"
-                               oninput="searchRecipes()">
-                    </div>
-                    <div class="flex gap-2">
-                        <select id="rank-filter" onchange="applyFilters()" class="px-4 py-3 rounded-xl bg-black/30 border border-white/10 text-sm focus:outline-none focus:border-indigo-500">
-                            <option value="">Todos los rangos</option>
-                            <option value="Street Rat">Street Rat</option>
-                            <option value="Hoodlum">Hoodlum</option>
-                            <option value="Peddler">Peddler</option>
-                            <option value="Hustler">Hustler</option>
-                        </select>
-                        <select id="sort-filter" onchange="applyFilters()" class="px-4 py-3 rounded-xl bg-black/30 border border-white/10 text-sm focus:outline-none focus:border-indigo-500">
-                            <option value="profit-desc">Mayor ganancia</option>
-                            <option value="profit-asc">Menor ganancia</option>
-                            <option value="cost-asc">Menor costo</option>
-                            <option value="difficulty">Dificultad</option>
-                        </select>
-                    </div>
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                    La <span class="gradient-text">Célula</span><br>
+                    <span class="text-3xl md:text-4xl text-slate-600 dark:text-slate-400">Unidad de la Vida</span>
+                </h1>
+                <p class="text-lg text-slate-600 dark:text-slate-400 mb-8 max-w-lg typing-cursor" id="hero-text">
+                    Domina la estructura y función celular con nuestra guía interactiva completa.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <button onclick="showSection('study')" class="px-8 py-4 bg-gradient-to-r from-teal-600 to-emerald-600 text-white rounded-full font-semibold hover:shadow-lg hover:scale-105 transition-all flex items-center gap-2">
+                        <span>Comenzar a Estudiar</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </button>
+                    <button onclick="showSection('quiz')" class="px-8 py-4 border-2 border-teal-600 text-teal-600 dark:text-teal-400 rounded-full font-semibold hover:bg-teal-50 dark:hover:bg-teal-900/20 transition-all flex items-center gap-2">
+                        <i data-lucide="target" class="w-5 h-5"></i>
+                        <span>Modo Prueba</span>
+                    </button>
                 </div>
                 
-                <div class="flex flex-wrap gap-2">
-                    <button onclick="filterRecipes('all')" class="filter-chip px-4 py-2 rounded-full text-xs font-medium bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 transition-all" data-filter="all">Todas</button>
-                    <button onclick="filterRecipes('early')" class="filter-chip px-4 py-2 rounded-full text-xs font-medium bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10 transition-all" data-filter="early">🌱 Early</button>
-                    <button onclick="filterRecipes('mid')" class="filter-chip px-4 py-2 rounded-full text-xs font-medium bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10 transition-all" data-filter="mid">⚗️ Mid</button>
-                    <button onclick="filterRecipes('late')" class="filter-chip px-4 py-2 rounded-full text-xs font-medium bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10 transition-all" data-filter="late">👑 Late</button>
-                    <button onclick="filterRecipes('favorites')" class="filter-chip px-4 py-2 rounded-full text-xs font-medium bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10 transition-all" data-filter="favorites">⭐ Favoritas</button>
-                    <div class="w-px h-6 bg-white/10 mx-2"></div>
-                    <button onclick="filterRecipes('weed')" class="filter-chip px-4 py-2 rounded-full text-xs font-medium bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10 transition-all" data-filter="weed">🌿 Weed</button>
-                    <button onclick="filterRecipes('meth')" class="filter-chip px-4 py-2 rounded-full text-xs font-medium bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10 transition-all" data-filter="meth">💎 Meth</button>
-                    <button onclick="filterRecipes('cocaine')" class="filter-chip px-4 py-2 rounded-full text-xs font-medium bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10 transition-all" data-filter="cocaine">❄️ Coke</button>
-                    <button onclick="filterRecipes('shrooms')" class="filter-chip px-4 py-2 rounded-full text-xs font-medium bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10 transition-all" data-filter="shrooms">🍄 Shrooms</button>
+                <div class="mt-12 grid grid-cols-3 gap-6 max-w-md">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-teal-600 dark:text-teal-400" id="counter-1">0</div>
+                        <div class="text-sm text-slate-600 dark:text-slate-400">Flashcards</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-amber-600 dark:text-amber-400" id="counter-2">0</div>
+                        <div class="text-sm text-slate-600 dark:text-slate-400">Preguntas</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-emerald-600 dark:text-emerald-400" id="counter-3">0</div>
+                        <div class="text-sm text-slate-600 dark:text-slate-400">Organelos</div>
+                    </div>
                 </div>
             </div>
-
-            <!-- Stats Bar -->
-            <div class="flex items-center justify-between text-sm text-gray-400 px-2">
-                <span id="showing-text">Mostrando 52 recetas</span>
-                <div class="flex items-center gap-4">
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="checkbox" id="show-details" class="rounded bg-black/30 border-white/10 text-indigo-500 focus:ring-indigo-500" onchange="toggleDetails()">
-                        <span>Mostrar detalles</span>
-                    </label>
-                </div>
-            </div>
-
-            <!-- Grid -->
-            <div id="recipes-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-4"></div>
             
-            <!-- Load More -->
-            <div class="text-center py-8">
-                <button onclick="loadMore()" class="px-6 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-sm">
-                    Cargar más recetas
-                </button>
-            </div>
-        </section>
-
-        <!-- CALCULADORA -->
-        <section id="section-calculator" class="hidden space-y-6">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Left Panel -->
-                <div class="lg:col-span-2 space-y-4">
-                    <div class="glass-card rounded-2xl p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-semibold flex items-center gap-2">
-                                <span class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-sm">1</span>
-                                Selecciona la Base
-                            </h3>
-                            <span class="text-xs text-gray-400">Precio base del juego</span>
+            <div class="relative animate-float hidden lg:block">
+                <div class="relative w-full aspect-square max-w-lg mx-auto">
+                    <!-- Decorative Rings -->
+                    <div class="absolute inset-0 rounded-full border-2 border-teal-200 dark:border-teal-800 animate-pulse-glow"></div>
+                    <div class="absolute inset-4 rounded-full border border-amber-200 dark:border-amber-800 opacity-50"></div>
+                    
+                    <!-- Cell Visualization -->
+                    <div class="absolute inset-8 rounded-full bg-gradient-to-br from-teal-500/20 to-emerald-500/20 backdrop-blur-sm flex items-center justify-center">
+                        <div class="text-center">
+                            <i data-lucide="dna" class="w-24 h-24 text-teal-600 dark:text-teal-400 mx-auto mb-4"></i>
+                            <p class="text-sm font-medium text-teal-800 dark:text-teal-200">Célula Eucariota</p>
                         </div>
-                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="calc-bases"></div>
-                    </div>
-
-                    <div class="glass-card rounded-2xl p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-semibold flex items-center gap-2">
-                                <span class="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-sm">2</span>
-                                Añade Ingredientes
-                            </h3>
-                            <span class="text-xs text-gray-400" id="ing-count">0/8</span>
-                        </div>
-                        <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2" id="calc-ingredients"></div>
-                        
-                        <div class="mt-4 p-4 rounded-xl bg-black/30 border border-white/5">
-                            <div class="text-xs text-gray-400 mb-2">Efectos disponibles:</div>
-                            <div class="flex flex-wrap gap-2" id="available-effects">
-                                <!-- Se llena dinámicamente -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="glass-card rounded-2xl p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-semibold">Secuencia de Mezcla</h3>
-                            <button onclick="clearCalc()" class="text-xs text-red-400 hover:text-red-300 flex items-center gap-1">
-                                <i class="fas fa-trash"></i> Limpiar
-                            </button>
-                        </div>
-                        <div id="calc-steps" class="space-y-2 max-h-64 overflow-y-auto custom-scrollbar">
-                            <div class="text-center py-8 text-gray-500">
-                                <i class="fas fa-arrow-up text-2xl mb-2 opacity-50"></i>
-                                <p>Selecciona una base para comenzar</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right Panel - Results -->
-                <div class="space-y-4">
-                    <div class="glass-card rounded-2xl p-6 sticky top-24 border-indigo-500/20 bg-gradient-to-b from-indigo-500/5 to-transparent">
-                        <h3 class="text-lg font-semibold mb-6 text-center">Resultado</h3>
-                        
-                        <div class="space-y-4 mb-6">
-                            <div class="p-4 rounded-xl bg-red-500/10 border border-red-500/20">
-                                <div class="text-xs text-red-400 mb-1">Costo Total</div>
-                                <div class="text-2xl font-bold text-red-400 mono" id="calc-cost">$0</div>
-                            </div>
-                            
-                            <div class="flex justify-center">
-                                <i class="fas fa-arrow-down text-gray-600"></i>
-                            </div>
-
-                            <div class="p-4 rounded-xl bg-green-500/10 border border-green-500/20">
-                                <div class="text-xs text-green-400 mb-1">Precio Venta</div>
-                                <div class="text-2xl font-bold text-green-400 mono" id="calc-sell">$0</div>
-                                <div class="text-xs text-gray-400 mt-1" id="calc-multiplier">x1.0 base</div>
-                            </div>
-
-                            <div class="flex justify-center">
-                                <i class="fas fa-arrow-down text-gray-600"></i>
-                            </div>
-
-                            <div class="p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
-                                <div class="text-xs text-yellow-400 mb-1">Ganancia Neta</div>
-                                <div class="text-3xl font-bold profit-gold mono" id="calc-profit">$0</div>
-                                <div class="text-xs text-gray-400 mt-1" id="calc-roi">0% ROI</div>
-                            </div>
-                        </div>
-
-                        <div class="border-t border-white/10 pt-4">
-                            <div class="text-xs text-gray-400 mb-2">Efectos aplicados:</div>
-                            <div id="calc-effects" class="flex flex-wrap gap-2">
-                                <span class="text-xs text-gray-500">Ninguno</span>
-                            </div>
-                        </div>
-
-                        <button onclick="saveMix()" class="w-full mt-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl font-semibold hover:shadow-lg hover:shadow-indigo-500/50 transition-all btn-shine">
-                            <i class="fas fa-save mr-2"></i>Guardar Mezcla
-                        </button>
-                    </div>
-
-                    <!-- Saved Mixes -->
-                    <div class="glass-card rounded-2xl p-6">
-                        <h3 class="text-sm font-semibold mb-3 text-gray-400">Mezclas Guardadas</h3>
-                        <div id="saved-mixes" class="space-y-2 max-h-48 overflow-y-auto custom-scrollbar">
-                            <p class="text-xs text-gray-500 text-center py-4">No hay mezclas guardadas</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- OPTIMIZADOR -->
-        <section id="section-optimizer" class="hidden space-y-6">
-            <div class="glass-card rounded-2xl p-8 text-center max-w-3xl mx-auto border-indigo-500/20 relative overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-transparent to-purple-500/5"></div>
-                
-                <div class="relative z-10">
-                    <div class="w-24 h-24 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-indigo-500/50">
-                        <i class="fas fa-robot text-white text-4xl"></i>
                     </div>
                     
-                    <h2 class="text-3xl font-bold mb-2 gradient-text">Optimizador Inteligente</h2>
-                    <p class="text-gray-400 mb-8 max-w-md mx-auto">
-                        Ingresa tu presupuesto disponible y te recomendaré la receta más rentable que puedas fabricar.
-                    </p>
-
-                    <div class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto mb-8">
-                        <div class="flex-1 relative">
-                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">$</span>
-                            <input type="number" id="budget-input" placeholder="Tu presupuesto..." 
-                                   class="w-full pl-8 pr-4 py-4 rounded-xl bg-black/30 border border-white/10 text-center text-lg focus:border-indigo-500 focus:outline-none transition-all"
-                                   onkeypress="if(event.key==='Enter')optimizeBudget()">
+                    <!-- Orbiting Elements -->
+                    <div class="absolute inset-0 animate-spin" style="animation-duration: 20s;">
+                        <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-amber-400 rounded-full shadow-lg flex items-center justify-center">
+                            <i data-lucide="nucleus" class="w-6 h-6 text-white"></i>
                         </div>
-                        <button onclick="optimizeBudget()" class="px-8 py-4 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl font-semibold hover:shadow-lg hover:shadow-indigo-500/50 transition-all btn-shine whitespace-nowrap">
-                            <i class="fas fa-calculator mr-2"></i>Calcular
-                        </button>
                     </div>
-
-                    <div class="flex justify-center gap-4 text-xs text-gray-500 mb-8">
-                        <span class="flex items-center gap-1"><i class="fas fa-check text-green-500"></i> ROI óptimo</span>
-                        <span class="flex items-center gap-1"><i class="fas fa-check text-green-500"></i> Dificultad ajustada</span>
-                        <span class="flex items-center gap-1"><i class="fas fa-check text-green-500"></i> Ingredientes disponibles</span>
+                    <div class="absolute inset-0 animate-spin" style="animation-duration: 15s; animation-direction: reverse;">
+                        <div class="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-10 h-10 bg-emerald-400 rounded-full shadow-lg flex items-center justify-center">
+                            <i data-lucide="battery" class="w-5 h-5 text-white"></i>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div id="optimizer-result" class="hidden max-w-3xl mx-auto space-y-4"></div>
-
-            <!-- Quick Budgets -->
-            <div class="max-w-3xl mx-auto">
-                <h3 class="text-sm font-semibold text-gray-400 mb-3">Presupuestos rápidos:</h3>
-                <div class="flex flex-wrap gap-2">
-                    <button onclick="setBudget(50)" class="px-4 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-sm">$50</button>
-                    <button onclick="setBudget(100)" class="px-4 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-sm">$100</button>
-                    <button onclick="setBudget(200)" class="px-4 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-sm">$200</button>
-                    <button onclick="setBudget(500)" class="px-4 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-sm">$500</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- LABORATORIO (NUEVO) -->
-        <section id="section-lab" class="hidden space-y-6">
-            <div class="glass-card rounded-2xl p-8 text-center">
-                <div class="w-20 h-20 rounded-full bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center mx-auto mb-6">
-                    <i class="fas fa-vial text-white text-3xl"></i>
-                </div>
-                <h2 class="text-2xl font-bold mb-4">Laboratorio de Efectos</h2>
-                <p class="text-gray-400 mb-6">Descubre cómo crear efectos específicos</p>
-                
-                <div class="max-w-2xl mx-auto">
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="effect-lab">
-                        <!-- Se llena dinámicamente -->
-                    </div>
-                </div>
+    <!-- Study Section -->
+    <section id="study" class="hidden pt-24 pb-12 px-4 sm:px-6 lg:px-8 min-h-screen">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold mb-4">Modo Estudio</h2>
+                <p class="text-slate-600 dark:text-slate-400">Explora cada tipo de célula y sus estructuras</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="glass-card rounded-2xl p-6">
-                    <h3 class="text-lg font-semibold mb-4">Árbol de Efectos</h3>
-                    <div id="effect-tree" class="space-y-2 max-h-96 overflow-y-auto custom-scrollbar">
-                        <p class="text-gray-500 text-center py-8">Selecciona un efecto para ver cómo crearlo</p>
-                    </div>
-                </div>
-
-                <div class="glass-card rounded-2xl p-6">
-                    <h3 class="text-lg font-semibold mb-4">Ingredientes y Precios</h3>
-                    <div class="space-y-2" id="ingredient-prices">
-                        <!-- Se llena dinámicamente -->
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Modal para detalles de receta -->
-    <div id="recipe-modal" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeModal()"></div>
-        <div class="absolute inset-0 flex items-center justify-center p-4">
-            <div class="glass-card rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto relative transform transition-all scale-95 opacity-0" id="modal-content">
-                <button onclick="closeModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition-all">
-                    <i class="fas fa-times"></i>
+            <!-- Tabs -->
+            <div class="flex justify-center gap-2 mb-8 flex-wrap">
+                <button onclick="switchTab('procariota')" id="tab-procariota" class="tab-btn px-6 py-3 rounded-full font-medium transition-all bg-slate-200 dark:bg-slate-800 hover:bg-teal-100 dark:hover:bg-teal-900/30">
+                    🦠 Procariota
                 </button>
-                <div id="modal-body"></div>
+                <button onclick="switchTab('animal')" id="tab-animal" class="tab-btn px-6 py-3 rounded-full font-medium transition-all bg-slate-200 dark:bg-slate-800 hover:bg-teal-100 dark:hover:bg-teal-900/30">
+                    🐕 Animal
+                </button>
+                <button onclick="switchTab('vegetal')" id="tab-vegetal" class="tab-btn px-6 py-3 rounded-full font-medium transition-all bg-slate-200 dark:bg-slate-800 hover:bg-teal-100 dark:hover:bg-teal-900/30">
+                    🌱 Vegetal
+                </button>
+                <button onclick="switchTab('comun')" id="tab-comun" class="tab-btn px-6 py-3 rounded-full font-medium transition-all bg-slate-200 dark:bg-slate-800 hover:bg-teal-100 dark:hover:bg-teal-900/30">
+                    🔬 Estructuras Comunes
+                </button>
+            </div>
+
+            <!-- Content Container -->
+            <div id="study-content" class="glass rounded-3xl p-8 min-h-[600px]">
+                <!-- Content injected via JS -->
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-4 right-4 z-50 transform translate-y-20 opacity-0 transition-all duration-300">
-        <div class="glass-card rounded-xl px-6 py-3 flex items-center gap-3 border-green-500/20 bg-green-500/10">
-            <i class="fas fa-check-circle text-green-400"></i>
-            <span id="toast-message">Operación exitosa</span>
+    <!-- Practice Section (Flashcards) -->
+    <section id="practice" class="hidden pt-24 pb-12 px-4 sm:px-6 lg:px-8 min-h-screen">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold mb-4">Flashcards Interactivas</h2>
+                <p class="text-slate-600 dark:text-slate-400 mb-6">Haz clic en la tarjeta para voltearla</p>
+                
+                <!-- Progress -->
+                <div class="flex items-center justify-center gap-4 mb-8">
+                    <span class="text-sm font-medium">Progreso:</span>
+                    <div class="w-64 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                        <div id="flashcard-progress" class="h-full bg-gradient-to-r from-teal-500 to-emerald-500 transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                    <span id="flashcard-count" class="text-sm font-medium">1/20</span>
+                </div>
+            </div>
+
+            <div class="relative h-[500px] perspective-1000">
+                <div id="flashcard-container" class="flip-card w-full h-full cursor-pointer" onclick="flipCard()">
+                    <div class="flip-card-inner w-full h-full relative">
+                        <div class="flip-card-front absolute inset-0 glass rounded-3xl p-8 flex flex-col items-center justify-center text-center border-2 border-teal-200 dark:border-teal-800">
+                            <div class="w-20 h-20 bg-teal-100 dark:bg-teal-900/50 rounded-full flex items-center justify-center mb-6">
+                                <i data-lucide="help-circle" class="w-10 h-10 text-teal-600 dark:text-teal-400"></i>
+                            </div>
+                            <h3 id="card-front" class="text-2xl font-bold mb-4">¿Qué es una célula procariota?</h3>
+                            <p class="text-slate-500 dark:text-slate-400 text-sm">Haz clic para ver la respuesta</p>
+                        </div>
+                        <div class="flip-card-back absolute inset-0 glass rounded-3xl p-8 flex flex-col items-center justify-center text-center border-2 border-emerald-200 dark:border-emerald-800 bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20">
+                            <div class="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/50 rounded-full flex items-center justify-center mb-6">
+                                <i data-lucide="check-circle" class="w-10 h-10 text-emerald-600 dark:text-emerald-400"></i>
+                            </div>
+                            <p id="card-back" class="text-xl leading-relaxed">Célula sin núcleo definido ni organelos rodeados por membranas. Su ADN se encuentra libre en el citoplasma.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-center gap-4 mt-8">
+                <button onclick="prevCard()" class="px-6 py-3 rounded-full bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors flex items-center gap-2">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                    Anterior
+                </button>
+                <button onclick="shuffleCards()" class="px-6 py-3 rounded-full bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors flex items-center gap-2">
+                    <i data-lucide="shuffle" class="w-5 h-5"></i>
+                    Mezclar
+                </button>
+                <button onclick="nextCard()" class="px-6 py-3 rounded-full bg-teal-600 text-white hover:bg-teal-700 transition-colors flex items-center gap-2">
+                    Siguiente
+                    <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </button>
+            </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Compare Section -->
+    <section id="compare" class="hidden pt-24 pb-12 px-4 sm:px-6 lg:px-8 min-h-screen">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold mb-4">Comparador de Células</h2>
+                <p class="text-slate-600 dark:text-slate-400">Visualiza las diferencias lado a lado</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-6">
+                <!-- Procariota -->
+                <div class="glass rounded-3xl p-6 border-2 border-amber-200 dark:border-amber-800">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-amber-100 dark:bg-amber-900/50 rounded-full flex items-center justify-center">
+                            <span class="text-2xl">🦠</span>
+                        </div>
+                        <h3 class="text-xl font-bold">Procariota</h3>
+                    </div>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start gap-2"><i data-lucide="x-circle" class="w-4 h-4 text-red-500 mt-0.5"></i><span>Sin núcleo definido</span></li>
+                        <li class="flex items-start gap-2"><i data-lucide="x-circle" class="w-4 h-4 text-red-500 mt-0.5"></i><span>Sin organelos membranosos</span></li>
+                        <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5"></i><span>Pared celular (peptidoglicano)</span></li>
+                        <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5"></i><span>Ribosomas 70S</span></li>
+                        <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5"></i><span>ADN libre en citoplasma</span></li>
+                        <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5"></i><span>Puede tener flagelos/pili</span></li>
+                    </ul>
+                </div>
+
+                <!-- Animal -->
+                <div class="glass rounded-3xl p-6 border-2 border-rose-200 dark:border-rose-800 relative transform lg:scale-105 lg:z-10 bg-white/50 dark:bg-slate-800/50">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-rose-500 text-white text-xs font-bold rounded-full">EUCARIOTA</div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-rose-100 dark:bg-rose-900/50 rounded-full flex items-center justify-center">
+                            <span class="text-2xl">🐕</span>
+                        </div>
+                        <h3 class="text-xl font-bold">Animal</h3>
+                    </div>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5"></i><span>Núcleo definido con membrana</span></li>
+                        <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5"></i><span>Organelos membranosos</span></li>
+                        <li class="flex items-start gap-2"><i data-lucide="x-circle" class="w-4 h-4 text-red-500 mt-0.5"></i><span>Sin pared celular</span></li>
+                        <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5"></i><span>Ribosomas 80S</span></li>
+                        <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5"></i><span>Centriolos presentes</span></li>
+                        <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5"></i><span>Vacuolas pequeñas</span></li>
+                        <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5"></i><span>Formas irregulares</span></li>
+                    </ul>
+                </div>
+
+                <!-- Vegetal -->
+                <div class="glass rounded-3xl p-6 border-2 border-emerald-200 dark:border-emerald-800 relative transform lg:scale-105 lg:z-10 bg-white/50 dark:bg-slate-800/50">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-emerald-500 text-white text-xs font-bold rounded-full">EUCARIOTA</div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/50 rounded-full flex items-center justify-center">
+                            <span class="text-2xl">🌱</span>
+                        </div>
+                        <h3 class="text-xl font-bold">Vegetal</h3>
+                    </div>
+                    <ul class="space-y-3 text-sm">
+                        <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5"></i><span>Núcleo definido con membrana</span></li>
+                        <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5"></i><span>Organelos membranosos</span></li>
+                        <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5"></i><span>Pared celular (celulosa)</span></li>
+                        <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5"></i><span>Ribosomas 80S</span></li>
+                        <li class="flex items-start gap-2"><i data-lucide="x-circle" class="w-4 h-4 text-red-500 mt-0.5"></i><span>Sin centriolos</span></li>
+                        <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5"></i><span>Gran vacuola central</span></li>
+                        <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5"></i><span>Cloroplastos (fotosíntesis)</span></li>
+                        <li class="flex items-start gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-green-500 mt-0.5"></i><span>Formas regulares</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Interactive Venn Diagram -->
+            <div class="mt-12 glass rounded-3xl p-8">
+                <h3 class="text-2xl font-bold text-center mb-8">Diagrama de Venn Interactivo</h3>
+                <div class="relative h-[400px] flex items-center justify-center">
+                    <div class="absolute w-64 h-64 rounded-full bg-rose-500/20 border-2 border-rose-400 left-1/4 flex items-center justify-center text-center p-8 hover:scale-105 transition-transform cursor-pointer group">
+                        <div class="opacity-0 group-hover:opacity-100 transition-opacity absolute inset-0 bg-rose-500/90 rounded-full flex items-center justify-center text-white p-6 text-sm">
+                            Centriolos, vacuolas pequeñas, sin pared, formas irregulares
+                        </div>
+                        <span class="font-bold text-rose-700 dark:text-rose-300">Animal</span>
+                    </div>
+                    <div class="absolute w-64 h-64 rounded-full bg-emerald-500/20 border-2 border-emerald-400 right-1/4 flex items-center justify-center text-center p-8 hover:scale-105 transition-transform cursor-pointer group">
+                        <div class="opacity-0 group-hover:opacity-100 transition-opacity absolute inset-0 bg-emerald-500/90 rounded-full flex items-center justify-center text-white p-6 text-sm">
+                            Pared celulosa, cloroplastos, gran vacuola, sin centriolos
+                        </div>
+                        <span class="font-bold text-emerald-700 dark:text-emerald-300">Vegetal</span>
+                    </div>
+                    <div class="absolute w-48 h-48 rounded-full bg-purple-500/30 border-2 border-purple-400 z-10 flex items-center justify-center text-center p-4 hover:scale-110 transition-transform cursor-pointer">
+                        <span class="font-bold text-purple-700 dark:text-purple-300 text-sm">Eucariotas:<br>Núcleo, mitocondrias, RE, Golgi, ribosomas 80S</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Section -->
+    <section id="quiz" class="hidden pt-24 pb-12 px-4 sm:px-6 lg:px-8 min-h-screen">
+        <div class="max-w-3xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold mb-4">Modo Prueba</h2>
+                <p class="text-slate-600 dark:text-slate-400">Pon a prueba tus conocimientos</p>
+            </div>
+
+            <div id="quiz-container" class="glass rounded-3xl p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="text-sm font-medium text-slate-600 dark:text-slate-400">Pregunta <span id="current-question">1</span> de <span id="total-questions">10</span></span>
+                    <span class="px-3 py-1 rounded-full bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 text-sm font-bold" id="score-display">Puntuación: 0</span>
+                </div>
+
+                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 mb-8">
+                    <div id="quiz-progress" class="bg-gradient-to-r from-teal-500 to-emerald-500 h-2 rounded-full transition-all duration-300" style="width: 10%"></div>
+                </div>
+
+                <h3 id="question-text" class="text-xl font-bold mb-6">¿Cuál es la función principal de la mitocondria?</h3>
+
+                <div id="options-container" class="space-y-3">
+                    <!-- Options injected via JS -->
+                </div>
+
+                <div id="explanation" class="hidden mt-6 p-4 rounded-xl bg-slate-100 dark:bg-slate-800">
+                    <p class="text-sm" id="explanation-text"></p>
+                </div>
+
+                <div class="flex justify-end mt-6">
+                    <button id="next-question-btn" onclick="nextQuestion()" class="hidden px-6 py-3 bg-teal-600 text-white rounded-full font-medium hover:bg-teal-700 transition-colors">
+                        Siguiente Pregunta
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div id="quiz-results" class="hidden glass rounded-3xl p-8 text-center">
+                <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-r from-teal-500 to-emerald-500 flex items-center justify-center">
+                    <i data-lucide="trophy" class="w-12 h-12 text-white"></i>
+                </div>
+                <h3 class="text-3xl font-bold mb-2">¡Prueba Completada!</h3>
+                <p class="text-slate-600 dark:text-slate-400 mb-6">Aquí están tus resultados</p>
+                
+                <div class="text-6xl font-bold gradient-text mb-2" id="final-score">0/10</div>
+                <p class="text-lg mb-8" id="result-message">¡Sigue estudiando!</p>
+                
+                <div class="flex justify-center gap-4">
+                    <button onclick="restartQuiz()" class="px-8 py-3 bg-teal-600 text-white rounded-full font-medium hover:bg-teal-700 transition-colors">
+                        Intentar de Nuevo
+                    </button>
+                    <button onclick="showSection('study')" class="px-8 py-3 border-2 border-slate-300 dark:border-slate-600 rounded-full font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                        Volver a Estudiar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 mt-12 py-8 px-4">
+        <div class="max-w-7xl mx-auto text-center text-slate-600 dark:text-slate-400 text-sm">
+            <p>© 2026 BioCell 2°M - Liceo Agustín Ross Edwards</p>
+            <p class="mt-2">Prof. Valeria Pavez - Biología</p>
+        </div>
+    </footer>
 
     <script>
-        // ==========================================
-        // SCHEDULE I PRO - DATABASE COMPLETA
-        // 52+ recetas verificadas (Actualizado 2025)
-        // ==========================================
+        // Initialize Lucide icons
+        lucide.createIcons();
 
-        const recipes = [
-            // EARLY GAME - Hoodlum I-V
-            {
-                id: 1,
-                name: "OG Kush Básico",
-                category: "early",
-                type: "weed",
-                base: "OG Kush",
-                baseIcon: "🌿",
-                basePrice: 38,
-                rank: "Hoodlum I",
-                ingredients: [
-                    {icon: "🌿", name: "OG Kush", price: 30},
-                    {icon: "🍌", name: "Banana", price: 2},
-                    {icon: "🥒", name: "Cuke", price: 2},
-                    {icon: "🍌", name: "Banana", price: 2}
-                ],
-                effects: ["Jennerising", "Thought-Provoking", "Energizing", "Gingeritis"],
-                cost: 36,
-                sellPrice: 80,
-                profit: 44,
-                addiction: 40,
-                difficulty: "Fácil",
-                description: "Receta inicial perfecta para empezar a mezclar"
+        // Data based on the uploaded study guide
+        const studyData = {
+            procariota: {
+                title: "Célula Procariota",
+                color: "amber",
+                description: "Células simples sin núcleo definido ni organelos membranosos",
+                structures: [
+                    { name: "Gránulos de alimento", icon: "cookie", desc: "Pequeñas reservas de nutrientes" },
+                    { name: "Ribosomas", icon: "cpu", desc: "No tienen membrana, están libres en citoplasma. Formados por ARN ribosomal y proteínas. Son pequeños (70S)" },
+                    { name: "Pili", icon: "anchor", desc: "Permiten adherencia a otras células. Los pili sexuales permiten transferir ADN entre bacterias (conjugación)" },
+                    { name: "Cápsula o glucocálix", icon: "shield", desc: "Capa externa viscosa que rodea la célula, ubicada por fuera de la pared celular. Protege, ayuda a la adhesión. Evita que el sistema inmune la destruya. Formada por polisacáridos" },
+                    { name: "Pared celular", icon: "square", desc: "Capa rígida que rodea la membrana plasmática, da forma, protege, evita que la célula se rompa por entrada excesiva de agua. Formada principalmente por peptidoglicano" },
+                    { name: "Membrana plasmática", icon: "layers", desc: "Capa delgada y flexible que rodea el citoplasma. Separa el interior de la célula del medio externo. Regula el paso de sustancias. Participa en procesos metabólicos. Formada por bicapa de fosfolípidos y proteínas" },
+                    { name: "Citoplasma", icon: "droplets", desc: "Medio interno gelatinoso que se encuentra dentro de la membrana plasmática. Compuesto por agua, sales, proteínas y otras moléculas. No tiene organelos membranosos. Contiene ribosomas y material genético" },
+                    { name: "Plásmido", icon: "circle-dot", desc: "Pequeña molécula circular de ADN. Puede replicarse de forma independiente. Contiene genes ventajosos. Pueden transferirse entre bacterias mediante conjugación" },
+                    { name: "Flagelo procariota", icon: "move", desc: "Permite el movimiento de la célula" },
+                    { name: "Cromosoma (región del nucleoide)", icon: "dna", desc: "ADN libre en el citoplasma, no rodeado por membrana" }
+                ]
             },
-            {
-                id: 2,
-                name: "OG Kush Sweet Fruit",
-                category: "early",
-                type: "weed",
-                base: "OG Kush",
-                baseIcon: "🌿",
-                basePrice: 38,
-                rank: "Hoodlum III",
-                ingredients: [
-                    {icon: "🌿", name: "OG Kush", price: 30},
-                    {icon: "💊", name: "Paracetamol", price: 3},
-                    {icon: "🥒", name: "Cuke", price: 2},
-                    {icon: "⛽", name: "Gasoline", price: 5},
-                    {icon: "🫘", name: "Mega Bean", price: 7},
-                    {icon: "🔋", name: "Battery", price: 8}
-                ],
-                effects: ["Anti-Gravity", "Glowing", "Balding", "Tropic Thunder", "Zombifying", "Cyclopean", "Foggy", "Bright-Eyed"],
-                cost: 55,
-                sellPrice: 164,
-                profit: 109,
-                addiction: 100,
-                difficulty: "Media",
-                description: "Excelente transición al mid-game con 8 efectos"
+            comun: {
+                title: "Estructuras Comunes Eucariotas",
+                color: "purple",
+                description: "Estructuras presentes en células animales y vegetales",
+                structures: [
+                    { name: "Membrana plasmática", icon: "layers", desc: "Bicapa de fosfolípidos con proteínas que recubre la célula y separa el interior del medio externo. Regula el paso de sustancias. Protege el contenido celular. Permite comunicación mediante proteínas receptoras" },
+                    { name: "Citoplasma", icon: "droplets", desc: "Medio interno gelatinoso entre la membrana plasmática y el núcleo. Formado por agua, vitaminas, sales y otras moléculas. Contiene organelos celulares" },
+                    { name: "Núcleo", icon: "circle", desc: "Organelo que contiene y protege el material genético (ADN). Rodeado por membrana doble (envoltura nuclear). Contiene ADN organizado en cromosomas. En su interior se encuentra el nucléolo" },
+                    { name: "Nucléolo", icon: "target", desc: "Estructura ubicada dentro del núcleo. Se encarga de producir y ensamblar los ribosomas. No está rodeado por membrana. Formado por ARN ribosomal y proteínas" },
+                    { name: "Ribosomas", icon: "cpu", desc: "Síntesis de proteínas. Se encarga de leer la información del ARN mensajero y unir aminoácidos para formar proteínas. Se encuentran libres en el citoplasma o adheridos al RER. Formados por ARN ribosomal y proteínas. Es más grande que el ribosoma procariota (80S)" },
+                    { name: "Mitocondrias", icon: "battery-charging", desc: "Producen ATP. Realizan la respiración celular para producir energía en forma de ATP. Tienen doble membrana. La membrana interna forma pliegues llamados crestas. Poseen su propio ADN" },
+                    { name: "Retículo endoplasmático liso", icon: "waves", desc: "Organelo formado por una red de membranas. Síntesis de lípidos (grasas y fosfolípidos). Desintoxicación de sustancias. Almacenamiento de calcio en algunas células" },
+                    { name: "Retículo endoplasmático rugoso", icon: "grid-3x3", desc: "Organelo formado por una red de membranas que tiene ribosomas adheridos a su superficie. Síntesis de proteínas. Transporte de proteínas hacia otros organelos, como el aparato de Golgi" },
+                    { name: "Lisosomas", icon: "trash-2", desc: "Contienen enzimas digestivas. Degradan sustancias y desechos celulares. Destruyen organelos dañados. Digestionan partículas o microorganismos que entran a la célula" },
+                    { name: "Aparato de Golgi", icon: "package", desc: "Organelo de las células eucariotas formado por sacos membranosos aplanados. Modificar proteínas y lípidos que vienen del retículo endoplasmático. Empaquetar y transportar sustancias dentro o fuera de la célula. Formar vesículas, como los lisosomas" },
+                    { name: "Citoesqueleto", icon: "network", desc: "Red de filamentos de proteínas que se encuentra en el citoplasma. Da forma y soporte a la célula. Permite el movimiento celular y el transporte de sustancias dentro de la célula. Formado principalmente por microtúbulos, filamentos intermedios y microfilamentos" }
+                ]
             },
-            {
-                id: 3,
-                name: "OG Kush Completo V1",
-                category: "early",
-                type: "weed",
-                base: "OG Kush",
-                baseIcon: "🌿",
-                basePrice: 38,
-                rank: "Hoodlum V",
-                ingredients: [
-                    {icon: "🌿", name: "OG Kush", price: 30},
-                    {icon: "💊", name: "Paracetamol", price: 3},
-                    {icon: "🍌", name: "Banana", price: 2},
-                    {icon: "🍩", name: "Donut", price: 3},
-                    {icon: "🥒", name: "Cuke", price: 2},
-                    {icon: "💊", name: "Paracetamol", price: 3},
-                    {icon: "🍌", name: "Banana", price: 2},
-                    {icon: "💙", name: "Viagra", price: 4}
-                ],
-                effects: ["Anti-Gravity", "Balding", "Thought-Provoking", "Calorie-Dense", "Jennerising", "Sneaky", "Gingeritis", "Tropic Thunder"],
-                cost: 49,
-                sellPrice: 136,
-                profit: 87,
-                addiction: 100,
-                difficulty: "Media",
-                description: "Versión económica con 8 efectos"
+            animal: {
+                title: "Célula Animal",
+                color: "rose",
+                description: "Célula eucariota con centriolos pero sin pared celular",
+                exclusive: [
+                    { name: "Centriolos", icon: "cylinder", desc: "Organelos cilíndricos formados por microtúbulos encargados de la división celular" }
+                ]
             },
-            {
-                id: 4,
-                name: "Sour Diesel Básico",
-                category: "early",
-                type: "weed",
-                base: "Sour Diesel",
-                baseIcon: "🍃",
-                basePrice: 40,
-                rank: "Street Rat IV",
-                ingredients: [
-                    {icon: "🍃", name: "Sour Diesel", price: 35},
-                    {icon: "🥒", name: "Cuke", price: 2},
-                    {icon: "🤧", name: "Flu Medicine", price: 5},
-                    {icon: "🍌", name: "Banana", price: 2}
-                ],
-                effects: ["Refreshing", "Thought-Provoking", "Sedating", "Gingeritis"],
-                cost: 44,
-                sellPrice: 71,
-                profit: 27,
-                addiction: 50,
-                difficulty: "Fácil",
-                description: "Buena opción temprana con Sour Diesel"
-            },
-            {
-                id: 5,
-                name: "Sour Diesel Completo",
-                category: "early",
-                type: "weed",
-                base: "Sour Diesel",
-                baseIcon: "🍃",
-                basePrice: 40,
-                rank: "Hoodlum II",
-                ingredients: [
-                    {icon: "🍃", name: "Sour Diesel", price: 35},
-                    {icon: "🍌", name: "Banana", price: 2},
-                    {icon: "💊", name: "Paracetamol", price: 3},
-                    {icon: "🥒", name: "Cuke", price: 2},
-                    {icon: "💊", name: "Paracetamol", price: 3},
-                    {icon: "🍌", name: "Banana", price: 2},
-                    {icon: "🍩", name: "Donut", price: 3},
-                    {icon: "💙", name: "Viagra", price: 4}
-                ],
-                effects: ["Refreshing", "Thought-Provoking", "Balding", "Jennerising", "Sneaky", "Gingeritis", "Calorie-Dense", "Tropic Thunder"],
-                cost: 54,
-                sellPrice: 122,
-                profit: 68,
-                addiction: 100,
-                difficulty: "Media",
-                description: "Receta completa para Sour Diesel"
-            },
-            {
-                id: 6,
-                name: "Green Crack Rápido",
-                category: "early",
-                type: "weed",
-                base: "Green Crack",
-                baseIcon: "⚡",
-                basePrice: 43,
-                rank: "Hoodlum II",
-                ingredients: [
-                    {icon: "⚡", name: "Green Crack", price: 40},
-                    {icon: "💙", name: "Viagra", price: 4},
-                    {icon: "🫘", name: "Mega Bean", price: 7}
-                ],
-                effects: ["Cyclopean", "Tropic Thunder", "Foggy"],
-                cost: 51,
-                sellPrice: 83,
-                profit: 32,
-                addiction: 68,
-                difficulty: "Fácil",
-                description: "Mezcla rápida de 3 ingredientes"
-            },
-            {
-                id: 7,
-                name: "Green Crack Completo",
-                category: "early",
-                type: "weed",
-                base: "Green Crack",
-                baseIcon: "⚡",
-                basePrice: 43,
-                rank: "Hoodlum V",
-                ingredients: [
-                    {icon: "⚡", name: "Green Crack", price: 40},
-                    {icon: "🍌", name: "Banana", price: 2},
-                    {icon: "💊", name: "Paracetamol", price: 3},
-                    {icon: "🥒", name: "Cuke", price: 2},
-                    {icon: "💊", name: "Paracetamol", price: 3},
-                    {icon: "🥒", name: "Cuke", price: 2},
-                    {icon: "🍌", name: "Banana", price: 2},
-                    {icon: "🍩", name: "Donut", price: 3},
-                    {icon: "💙", name: "Viagra", price: 4}
-                ],
-                effects: ["Thought-Provoking", "Gingeritis", "Balding", "Jennerising", "Sneaky", "Energizing", "Calorie-Dense", "Tropic Thunder"],
-                cost: 61,
-                sellPrice: 125,
-                profit: 64,
-                addiction: 100,
-                difficulty: "Media",
-                description: "Máximo potencial de Green Crack"
-            },
-            {
-                id: 8,
-                name: "Grandaddy Purple Óptimo",
-                category: "early",
-                type: "weed",
-                base: "Grandaddy Purple",
-                baseIcon: "🍇",
-                basePrice: 45,
-                rank: "Hoodlum IV",
-                ingredients: [
-                    {icon: "🍇", name: "Grandaddy Purple", price: 45},
-                    {icon: "🍌", name: "Banana", price: 2},
-                    {icon: "💊", name: "Paracetamol", price: 3},
-                    {icon: "🥒", name: "Cuke", price: 2},
-                    {icon: "💊", name: "Paracetamol", price: 3},
-                    {icon: "🍌", name: "Banana", price: 2},
-                    {icon: "🍩", name: "Donut", price: 3},
-                    {icon: "💙", name: "Viagra", price: 4}
-                ],
-                effects: ["Sedating", "Thought-Provoking", "Balding", "Jennerising", "Sneaky", "Gingeritis", "Calorie-Dense", "Tropic Thunder"],
-                cost: 64,
-                sellPrice: 126,
-                profit: 62,
-                addiction: 100,
-                difficulty: "Media",
-                description: "La mejor receta para Grandaddy Purple"
-            },
-
-            // MID GAME - Peddler I-V
-            {
-                id: 9,
-                name: "OG Kush Mejorado",
-                category: "mid",
-                type: "weed",
-                base: "OG Kush",
-                baseIcon: "🌿",
-                basePrice: 38,
-                rank: "Peddler V",
-                ingredients: [
-                    {icon: "🌿", name: "OG Kush", price: 30},
-                    {icon: "⛽", name: "Gasoline", price: 5},
-                    {icon: "💊", name: "Paracetamol", price: 3},
-                    {icon: "🥒", name: "Cuke", price: 2},
-                    {icon: "🫘", name: "Mega Bean", price: 7},
-                    {icon: "🔋", name: "Battery", price: 8},
-                    {icon: "🍌", name: "Banana", price: 2},
-                    {icon: "🥒", name: "Cuke", price: 2}
-                ],
-                effects: ["Tropic Thunder", "Anti-Gravity", "Zombifying", "Jennerising", "Glowing", "Cyclopean", "Bright-Eyed", "Thought-Provoking"],
-                cost: 59,
-                sellPrice: 171,
-                profit: 112,
-                addiction: 100,
-                difficulty: "Media",
-                description: "Transición perfecta al mid-game"
-            },
-            {
-                id: 10,
-                name: "Sour Diesel Mejorado",
-                category: "mid",
-                type: "weed",
-                base: "Sour Diesel",
-                baseIcon: "🍃",
-                basePrice: 40,
-                rank: "Peddler V",
-                ingredients: [
-                    {icon: "🍃", name: "Sour Diesel", price: 35},
-                    {icon: "🍌", name: "Banana", price: 2},
-                    {icon: "🧪", name: "Iodine", price: 8},
-                    {icon: "💊", name: "Paracetamol", price: 3},
-                    {icon: "⛽", name: "Gasoline", price: 5},
-                    {icon: "🥒", name: "Cuke", price: 2},
-                    {icon: "🫘", name: "Mega Bean", price: 7},
-                    {icon: "🔋", name: "Battery", price: 8},
-                    {icon: "🍌", name: "Banana", price: 2},
-                    {icon: "🥒", name: "Cuke", price: 2}
-                ],
-                effects: ["Thought-Provoking", "Anti-Gravity", "Jennerising", "Tropic Thunder", "Zombifying", "Glowing", "Cyclopean", "Bright-Eyed"],
-                cost: 74,
-                sellPrice: 171,
-                profit: 97,
-                addiction: 100,
-                difficulty: "Media",
-                description: "Versión mejorada con Iodine"
-            },
-            {
-                id: 11,
-                name: "Meth Rápido",
-                category: "mid",
-                type: "meth",
-                base: "Meth",
-                baseIcon: "💎",
-                basePrice: 70,
-                rank: "Peddler III",
-                ingredients: [
-                    {icon: "💎", name: "Meth", price: 80},
-                    {icon: "🥒", name: "Cuke", price: 2},
-                    {icon: "💙", name: "Viagra", price: 4},
-                    {icon: "🫘", name: "Mega Bean", price: 7}
-                ],
-                effects: ["Cyclopean", "Tropic Thunder", "Foggy"],
-                cost: 93,
-                sellPrice: 167,
-                profit: 74,
-                addiction: 68,
-                difficulty: "Fácil",
-                description: "Introducción a Meth con pocos ingredientes"
-            },
-            {
-                id: 12,
-                name: "Meth 4 Ingredientes",
-                category: "mid",
-                type: "meth",
-                base: "Meth",
-                baseIcon: "💎",
-                basePrice: 70,
-                rank: "Peddler V",
-                ingredients: [
-                    {icon: "💎", name: "Meth", price: 80},
-                    {icon: "⛽", name: "Gasoline", price: 5},
-                    {icon: "🥒", name: "Cuke", price: 2},
-                    {icon: "🔋", name: "Battery", price: 8},
-                    {icon: "🫘", name: "Mega Bean", price: 7}
-                ],
-                effects: ["Zombifying", "Cyclopean", "Bright-Eyed", "Foggy"],
-                cost: 102,
-                sellPrice: 203,
-                profit: 101,
-                addiction: 100,
-                difficulty: "Media",
-                description: "Meth básico con buen ROI"
-            },
-            {
-                id: 13,
-                name: "Meth Athletic",
-                category: "mid",
-                type: "meth",
-                base: "Meth",
-                baseIcon: "💎",
-                basePrice: 70,
-                rank: "Peddler IV",
-                ingredients: [
-                    {icon: "💎", name: "Meth", price: 80},
-                    {icon: "🥤", name: "Energy Drink", price: 6},
-                    {icon: "🧴", name: "Mouth Wash", price: 4},
-                    {icon: "🔋", name: "Battery", price: 8},
-                    {icon: "🐴", name: "Horse Semen", price: 9}
-                ],
-                effects: ["Athletic", "Balding", "Bright-Eyed", "Long Faced"],
-                cost: 107,
-                sellPrice: 178,
-                profit: 71,
-                addiction: 85,
-                difficulty: "Media",
-                description: "Especial para clientes que buscan Athletic"
-            },
-            {
-                id: 14,
-                name: "Meth GOD MIX",
-                category: "mid",
-                type: "meth",
-                base: "Meth",
-                baseIcon: "💎",
-                basePrice: 70,
-                rank: "Hustler III",
-                ingredients: [
-                    {icon: "💎", name: "Meth", price: 80},
-                    {icon: "🍌", name: "Banana", price: 2},
-                    {icon: "🥒", name: "Cuke", price: 2},
-                    {icon: "💊", name: "Paracetamol", price: 3},
-                    {icon: "⛽", name: "Gasoline", price: 5},
-                    {icon: "🥒", name: "Cuke", price: 2},
-                    {icon: "🔋", name: "Battery", price: 8},
-                    {icon: "🐴", name: "Horse Semen", price: 9},
-                    {icon: "🫘", name: "Mega Bean", price: 7}
-                ],
-                effects: ["Electrifying", "Glowing", "Tropic Thunder", "Zombifying", "Cyclopean", "Bright-Eyed", "Long Faced", "Foggy"],
-                cost: 118,
-                sellPrice: 340,
-                profit: 222,
-                addiction: 100,
-                difficulty: "Difícil",
-                description: "La mejor receta de Meth del juego"
-            },
-
-            // LATE GAME - Hustler I-III
-            {
-                id: 15,
-                name: "Cocaine ULTIMATE",
-                category: "late",
-                type: "cocaine",
-                base: "Cocaine",
-                baseIcon: "❄️",
-                basePrice: 150,
-                rank: "Hustler III",
-                ingredients: [
-                    {icon: "❄️", name: "Cocaine", price: 150},
-                    {icon: "🍌", name: "Banana", price: 2},
-                    {icon: "🥒", name: "Cuke", price: 2},
-                    {icon: "💊", name: "Paracetamol", price: 3},
-                    {icon: "⛽", name: "Gasoline", price: 5},
-                    {icon: "🥒", name: "Cuke", price: 2},
-                    {icon: "🔋", name: "Battery", price: 8},
-                    {icon: "🐴", name: "Horse Semen", price: 9},
-                    {icon: "🫘", name: "Mega Bean", price: 7}
-                ],
-                effects: ["Electrifying", "Glowing", "Tropic Thunder", "Zombifying", "Cyclopean", "Bright-Eyed", "Long Faced", "Foggy"],
-                cost: 188,
-                sellPrice: 729,
-                profit: 541,
-                addiction: 100,
-                difficulty: "Difícil",
-                description: "Receta estándar de alta ganancia"
-            },
-            {
-                id: 16,
-                name: "Cocaine MEGA PROFIT",
-                category: "late",
-                type: "cocaine",
-                base: "Cocaine",
-                baseIcon: "❄️",
-                basePrice: 150,
-                rank: "Hustler III",
-                ingredients: [
-                    {icon: "❄️", name: "Cocaine", price: 150},
-                    {icon: "⛽", name: "Gasoline", price: 5},
-                    {icon: "🥒", name: "Cuke", price: 2},
-                    {icon: "🫘", name: "Mega Bean", price: 7},
-                    {icon: "🔋", name: "Battery", price: 8},
-                    {icon: "🥤", name: "Energy Drink", price: 6},
-                    {icon: "🍌", name: "Banana", price: 2},
-                    {icon: "🥒", name: "Cuke", price: 2},
-                    {icon: "🐴", name: "Horse Semen", price: 9},
-                    {icon: "💙", name: "Viagra", price: 4},
-                    {icon: "🥤", name: "Energy Drink", price: 6},
-                    {icon: "🫘", name: "Mega Bean", price: 7},
-                    {icon: "🧴", name: "Mouth Wash", price: 4}
-                ],
-                effects: ["Anti-Gravity", "Glowing", "Electrifying", "Zombifying", "Cyclopean", "Bright-Eyed", "Long Faced", "Shrinking"],
-                cost: 212,
-                sellPrice: 777,
-                profit: 565,
-                addiction: 100,
-                difficulty: "Experto",
-                description: "La receta más rentable del juego ($565)"
-            },
-            {
-                id: 17,
-                name: "Cocaine Anti-Gravity",
-                category: "late",
-                type: "cocaine",
-                base: "Cocaine",
-                baseIcon: "❄️",
-                basePrice: 150,
-                rank: "Hustler III",
-                ingredients: [
-                    {icon: "❄️", name: "Cocaine", price: 150},
-                    {icon: "🛢️", name: "Motor Oil", price: 6},
-                    {icon: "🥒", name: "Cuke", price: 2},
-                    {icon: "💊", name: "Paracetamol", price: 3},
-                    {icon: "⛽", name: "Gasoline", price: 5},
-                    {icon: "🥒", name: "Cuke", price: 2},
-                    {icon: "🔋", name: "Battery", price: 8},
-                    {icon: "🐴", name: "Horse Semen", price: 9},
-                    {icon: "🫘", name: "Mega Bean", price: 7}
-                ],
-                effects: ["Anti-Gravity", "Glowing", "Tropic Thunder", "Zombifying", "Cyclopean", "Bright-Eyed", "Long Faced", "Foggy"],
-                cost: 192,
-                sellPrice: 735,
-                profit: 543,
-                addiction: 100,
-                difficulty: "Difícil",
-                description: "Variante con Motor Oil para Anti-Gravity"
-            },
-            {
-                id: 18,
-                name: "Shrooms Básico",
-                category: "mid",
-                type: "shrooms",
-                base: "Shrooms",
-                baseIcon: "🍄",
-                basePrice: 50,
-                rank: "Peddler I",
-                ingredients: [
-                    {icon: "🍄", name: "Shrooms", price: 50},
-                    {icon: "🥒", name: "Cuke", price: 2},
-                    {icon: "🍌", name: "Banana", price: 2}
-                ],
-                effects: ["Gingeritis", "Energizing"],
-                cost: 54,
-                sellPrice: 62,
-                profit: 8,
-                addiction: 20,
-                difficulty: "Fácil",
-                description: "Introducción a Shrooms"
-            },
-            {
-                id: 19,
-                name: "Shrooms Completo",
-                category: "late",
-                type: "shrooms",
-                base: "Shrooms",
-                baseIcon: "🍄",
-                basePrice: 50,
-                rank: "Hustler I",
-                ingredients: [
-                    {icon: "🍄", name: "Shrooms", price: 50},
-                    {icon: "🍌", name: "Banana", price: 2},
-                    {icon: "💊", name: "Paracetamol", price: 3},
-                    {icon: "🥒", name: "Cuke", price: 2},
-                    {icon: "💊", name: "Paracetamol", price: 3},
-                    {icon: "🍌", name: "Banana", price: 2},
-                    {icon: "🍩", name: "Donut", price: 3},
-                    {icon: "💙", name: "Viagra", price: 4}
-                ],
-                effects: ["Gingeritis", "Sneaky", "Thought-Provoking", "Jennerising", "Calorie-Dense", "Tropic Thunder"],
-                cost: 69,
-                sellPrice: 118,
-                profit: 49,
-                addiction: 85,
-                difficulty: "Media",
-                description: "Shrooms con 6 efectos"
+            vegetal: {
+                title: "Célula Vegetal",
+                color: "emerald",
+                description: "Célula eucariota con pared celular, cloroplastos y gran vacuola",
+                exclusive: [
+                    { name: "Pared celular", icon: "shield-check", desc: "Capa rígida que rodea la membrana plasmática. Evita que se rompa por exceso de agua. Formada por celulosa" },
+                    { name: "Vacuola central", icon: "storage", desc: "Almacena agua, sales, nutrientes y desechos. Mantiene la turgencia, dando rigidez a la célula" },
+                    { name: "Cloroplastos", icon: "sun", desc: "Captan la energía de la luz solar y la transforman en glucosa para la célula (Fotosíntesis). Liberan oxígeno" }
+                ]
             }
-        ];
-
-        // Multiplicadores de efectos actualizados
-        const effectMultipliers = {
-            'Shrinking': 0.60,
-            'Zombifying': 0.58,
-            'Cyclopean': 0.56,
-            'Anti-Gravity': 0.54,
-            'Long Faced': 0.52,
-            'Electrifying': 0.50,
-            'Glowing': 0.48,
-            'Tropic Thunder': 0.46,
-            'Thought-Provoking': 0.44,
-            'Jennerising': 0.42,
-            'Bright-Eyed': 0.40,
-            'Spicy': 0.38,
-            'Foggy': 0.36,
-            'Slippery': 0.34,
-            'Athletic': 0.32,
-            'Balding': 0.30,
-            'Calorie-Dense': 0.28,
-            'Sedating': 0.26,
-            'Sneaky': 0.24,
-            'Energizing': 0.22,
-            'Gingeritis': 0.20,
-            'Refreshing': 0.18,
-            'Euphoric': 0.16,
-            'Focused': 0.14,
-            'Munchies': 0.12,
-            'Calming': 0.10,
-            'Toxic': 0.00,
-            'Disorienting': 0.00,
-            'Laxative': 0.00,
-            'Paranoia': 0.00,
-            'Seizure-Inducing': 0.00,
-            'Smelly': 0.00,
-            'Explosive': 0.00,
-            'Schizophrenic': 0.00
         };
 
-        // Ingredientes con efectos
-        const ingredientsData = [
-            {icon: '🥒', name: 'Cuke', price: 2, effect: 'Energizing'},
-            {icon: '🍌', name: 'Banana', price: 2, effect: 'Gingeritis'},
-            {icon: '💊', name: 'Paracetamol', price: 3, effect: 'Sneaky'},
-            {icon: '🍩', name: 'Donut', price: 3, effect: 'Calorie-Dense'},
-            {icon: '💙', name: 'Viagra', price: 4, effect: 'Tropic Thunder'},
-            {icon: '🧴', name: 'Mouth Wash', price: 4, effect: 'Balding'},
-            {icon: '🤧', name: 'Flu Medicine', price: 5, effect: 'Sedating'},
-            {icon: '⛽', name: 'Gasoline', price: 5, effect: 'Toxic'},
-            {icon: '🥤', name: 'Energy Drink', price: 6, effect: 'Athletic'},
-            {icon: '🛢️', name: 'Motor Oil', price: 6, effect: 'Slippery'},
-            {icon: '🫘', name: 'Mega Bean', price: 7, effect: 'Foggy'},
-            {icon: '🌶️', name: 'Chili', price: 7, effect: 'Spicy'},
-            {icon: '🔋', name: 'Battery', price: 8, effect: 'Bright-Eyed'},
-            {icon: '🧪', name: 'Iodine', price: 8, effect: 'Jennerising'},
-            {icon: '💉', name: 'Addy', price: 9, effect: 'Thought-Provoking'},
-            {icon: '🐴', name: 'Horse Semen', price: 9, effect: 'Long Faced'}
+        const flashcards = [
+            { front: "¿Qué característica define a una célula procariota?", back: "No posee núcleo definido ni organelos rodeados por membranas. Su ADN se encuentra libre en el citoplasma." },
+            { front: "¿Qué son los pili sexuales?", back: "Estructuras que permiten transferir ADN entre bacterias durante un proceso llamado conjugación bacteriana." },
+            { front: "¿De qué está formada la pared celular de las bacterias?", back: "Principalmente de peptidoglicano (azúcares y proteínas)." },
+            { front: "¿Cuál es la función de la cápsula o glucocálix?", back: "Proteger la célula, ayudar a la adhesión y evitar que el sistema inmune la destruya. Está formada por polisacáridos." },
+            { front: "¿Qué son los plásmidos?", back: "Pequeñas moléculas circulares de ADN que pueden replicarse independientemente y contienen genes ventajosos." },
+            { front: "¿Qué diferencia hay entre ribosomas procariotas y eucariotas?", back: "Los procariotas son más pequeños (70S) y los eucariotas son más grandes (80S)." },
+            { front: "¿Qué es el nucléolo y dónde se encuentra?", back: "Estructura dentro del núcleo encargada de producir y ensamblar los ribosomas. No está rodeado por membrana." },
+            { front: "¿Cuál es la función de las mitocondrias?", back: "Producir ATP mediante la respiración celular. Tienen doble membrana y su propio ADN." },
+            { front: "¿Qué diferencia hay entre RE liso y rugoso?", back: "El rugoso tiene ribosomas adheridos y sintetiza proteínas. El liso sintetiza lípidos y desintoxica." },
+            { front: "¿Qué son los lisosomas?", back: "Organelos que contienen enzimas digestivas para degradar sustancias, desechos y organelos dañados." },
+            { front: "¿Qué hace el Aparato de Golgi?", back: "Modifica, empaqueta y transporta proteínas y lípidos del RE. Forma vesículas como los lisosomas." },
+            { front: "¿Qué es el citoesqueleto?", back: "Red de filamentos de proteínas que da forma, soporte, permite movimiento y transporte intracelular." },
+            { front: "¿Qué organelos son exclusivos de la célula animal?", back: "Los centriolos, encargados de la división celular." },
+            { front: "¿Qué estructuras exclusivas tiene la célula vegetal?", back: "Pared celular (celulosa), gran vacuola central y cloroplastos." },
+            { front: "¿Cuál es la función de los cloroplastos?", back: "Realizar la fotosíntesis: captan luz solar y la transforman en glucosa, liberando oxígeno." },
+            { front: "¿Qué es la turgencia?", back: "Rigidez que le da la vacuola central a la célula vegetal al estar llena de agua." },
+            { front: "¿De qué está formada la membrana plasmática?", back: "Bicapa de fosfolípidos con proteínas incrustadas." },
+            { front: "¿Qué es la conjugación bacteriana?", back: "Proceso de transferencia de ADN entre bacterias mediante los pili sexuales." },
+            { front: "¿Qué es el peptidoglicano?", back: "Componente principal de la pared celular bacteriana, formado por azúcares y proteínas." },
+            { front: "¿Qué diferencia hay entre célula animal y vegetal en cuanto a forma?", back: "La animal tiene formas irregulares y la vegetal tiene formas regulares debido a la pared celular." }
         ];
 
-        // Estado global
-        let favorites = JSON.parse(localStorage.getItem('s1_favorites') || '[]');
-        let savedMixes = JSON.parse(localStorage.getItem('s1_mixes') || '[]');
-        let calcBase = null;
-        let calcIngredients = [];
-        let currentFilter = 'all';
-        let showDetails = false;
+        const quizQuestions = [
+            {
+                question: "¿Cuál es la principal diferencia entre células procariotas y eucariotas?",
+                options: [
+                    "Las procariotas son más grandes",
+                    "Las procariotas no tienen núcleo definido ni organelos membranosos",
+                    "Las eucariotas no tienen membrana plasmática",
+                    "Las procariotas tienen más organelos"
+                ],
+                correct: 1,
+                explanation: "Las células procariotas no poseen núcleo definido ni organelos rodeados por membranas, mientras que las eucariotas sí."
+            },
+            {
+                question: "¿De qué está formada la pared celular de las bacterias?",
+                options: [
+                    "Celulosa",
+                    "Quitina",
+                    "Peptidoglicano",
+                    "Lignina"
+                ],
+                correct: 2,
+                explanation: "La pared celular bacteriana está formada principalmente por peptidoglicano (azúcares y proteínas)."
+            },
+            {
+                question: "¿Cuál es la función de los ribosomas?",
+                options: [
+                    "Producir energía",
+                    "Sintetizar proteínas",
+                    "Almacenar agua",
+                    "Realizar la fotosíntesis"
+                ],
+                correct: 1,
+                explanation: "Los ribosomas se encargan de leer el ARN mensajero y unir aminoácidos para formar proteínas."
+            },
+            {
+                question: "¿Dónde se encuentra el ADN en una célula procariota?",
+                options: [
+                    "Dentro del núcleo",
+                    "En el nucléolo",
+                    "Libre en el citoplasma (región del nucleoide)",
+                    "Solo en los plásmidos"
+                ],
+                correct: 2,
+                explanation: "En las procariotas, el ADN se encuentra libre en el citoplasma en una región llamada nucleoide."
+            },
+            {
+                question: "¿Qué organelo produce ATP en la célula?",
+                options: [
+                    "Cloroplastos",
+                    "Mitocondrias",
+                    "Lisosomas",
+                    "Aparato de Golgi"
+                ],
+                correct: 1,
+                explanation: "Las mitocondrias realizan la respiración celular para producir energía en forma de ATP."
+            },
+            {
+                question: "¿Cuál es la función del retículo endoplasmático rugoso?",
+                options: [
+                    "Sintetizar lípidos",
+                    "Sintetizar proteínas (tiene ribosomas adheridos)",
+                    "Desintoxicar sustancias",
+                    "Almacenar calcio"
+                ],
+                correct: 1,
+                explanation: "El RE rugoso tiene ribosomas adheridos a su superficie y se encarga de la síntesis de proteínas."
+            },
+            {
+                question: "¿Qué son los centriolos?",
+                options: [
+                    "Organelos exclusivos de la célula vegetal",
+                    "Estructuras que realizan la fotosíntesis",
+                    "Organelos cilíndricos encargados de la división celular (célula animal)",
+                    "Vesículas digestivas"
+                ],
+                correct: 2,
+                explanation: "Los centriolos son organelos cilíndricos formados por microtúbulos, exclusivos de la célula animal, encargados de la división celular."
+            },
+            {
+                question: "¿Qué estructura le da rigidez a la célula vegetal?",
+                options: [
+                    "La membrana plasmática",
+                    "La pared celular de celulosa y la turgencia de la vacuola",
+                    "Los cloroplastos",
+                    "El citoesqueleto únicamente"
+                ],
+                correct: 1,
+                explanation: "La pared celular de celulosa y la presión de la vacuola central (turgencia) mantienen la rigidez."
+            },
+            {
+                question: "¿Cuál es la función de los cloroplastos?",
+                options: [
+                    "Producir ATP",
+                    "Realizar la fotosíntesis y liberar oxígeno",
+                    "Digestionar desechos",
+                    "Empaquetar proteínas"
+                ],
+                correct: 1,
+                explanation: "Los cloroplastos captan energía solar y la transforman en glucosa (fotosíntesis), liberando oxígeno."
+            },
+            {
+                question: "¿Qué son los plásmidos?",
+                options: [
+                    "Organelos de digestión",
+                    "Moléculas circulares de ADN independientes en bacterias",
+                    "Proteínas estructurales",
+                    "Tipos de ribosomas"
+                ],
+                correct: 1,
+                explanation: "Los plásmidos son pequeñas moléculas circulares de ADN que pueden replicarse independientemente en bacterias."
+            }
+        ];
 
-        // Inicialización
+        // State
+        let currentFlashcard = 0;
+        let currentQuiz = 0;
+        let score = 0;
+        let answered = false;
+
+        // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            initChart();
-            renderRecipes('all');
-            initCalculator();
-            initLab();
-            loadRecentActivity();
-            updateStats();
+            // Animate counters
+            animateCounter('counter-1', 20);
+            animateCounter('counter-2', 10);
+            animateCounter('counter-3', 15);
+            
+            // Load initial tab
+            switchTab('procariota');
+            
+            // Check system theme preference
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.classList.add('dark');
+            }
         });
 
-        // ==========================================
-        // NAVEGACIÓN
-        // ==========================================
-        function showSection(section) {
-            document.querySelectorAll('main > section').forEach(s => {
-                s.classList.add('hidden');
-                s.classList.remove('animate-fade-in');
-            });
-            
-            const target = document.getElementById('section-' + section);
-            target.classList.remove('hidden');
-            target.classList.add('animate-fade-in');
-
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('tab-active');
-                btn.classList.add('tab-inactive');
-            });
-            
-            const activeBtn = document.querySelector('[data-section="' + section + '"]');
-            if (activeBtn) {
-                activeBtn.classList.remove('tab-inactive');
-                activeBtn.classList.add('tab-active');
-            }
-
-            if (section === 'dashboard') initChart();
-            if (section === 'recipes') renderRecipes(currentFilter);
-            if (section === 'calculator') initCalculator();
-            if (section === 'optimizer') document.getElementById('budget-input')?.focus();
-        }
-
-        // ==========================================
-        // RECETAS - Renderizado y Filtrado
-        // ==========================================
-        function renderRecipes(filter) {
-            currentFilter = filter;
-            const grid = document.getElementById('recipes-grid');
-            const search = document.getElementById('search-input')?.value.toLowerCase() || '';
-            const rankFilter = document.getElementById('rank-filter')?.value || '';
-            const sortFilter = document.getElementById('sort-filter')?.value || 'profit-desc';
-
-            let filtered = recipes.filter(r => {
-                if (filter === 'favorites') return favorites.includes(r.id);
-                if (filter !== 'all' && r.category !== filter && r.type !== filter) return false;
-                if (search && !r.name.toLowerCase().includes(search) && 
-                    !r.ingredients.some(i => i.name.toLowerCase().includes(search)) &&
-                    !r.effects.some(e => e.toLowerCase().includes(search))) return false;
-                if (rankFilter && !r.rank.includes(rankFilter)) return false;
-                return true;
-            });
-
-            // Ordenar
-            filtered.sort((a, b) => {
-                switch(sortFilter) {
-                    case 'profit-desc': return b.profit - a.profit;
-                    case 'profit-asc': return a.profit - b.profit;
-                    case 'cost-asc': return a.cost - b.cost;
-                    case 'difficulty': 
-                        const diff = { 'Fácil': 1, 'Media': 2, 'Difícil': 3, 'Experto': 4 };
-                        return diff[a.difficulty] - diff[b.difficulty];
-                    default: return b.profit - a.profit;
-                }
-            });
-
-            document.getElementById('showing-text').textContent = `Mostrando ${filtered.length} recetas`;
-
-            if (filtered.length === 0) {
-                grid.innerHTML = `
-                    <div class="col-span-full text-center py-12">
-                        <i class="fas fa-search text-4xl text-gray-600 mb-4"></i>
-                        <p class="text-gray-500">No se encontraron recetas</p>
-                        <button onclick="resetFilters()" class="mt-4 text-indigo-400 hover:text-indigo-300 text-sm">Limpiar filtros</button>
-                    </div>
-                `;
-                return;
-            }
-
-            grid.innerHTML = filtered.map((r, index) => {
-                const isFav = favorites.includes(r.id);
-                const profitClass = r.profit >= 200 ? 'text-green-400' : 
-                                   r.profit >= 100 ? 'text-blue-400' : 
-                                   r.profit > 0 ? 'text-yellow-400' : 'text-red-400';
-                const typeClass = `type-${r.type}`;
-                const diffClass = `difficulty-${r.difficulty.toLowerCase()}`;
-                
-                return `
-                    <div class="glass-card rounded-2xl p-6 ${typeClass} recipe-card relative overflow-hidden cursor-pointer" 
-                         onclick="showRecipeDetails(${r.id})"
-                         style="animation-delay: ${index * 0.05}s">
-                        
-                        ${isFav ? '<div class="absolute top-4 right-4 text-yellow-400 animate-pulse"><i class="fas fa-star"></i></div>' : ''}
-
-                        <div class="flex items-center gap-3 mb-4">
-                            <span class="text-3xl bg-white/5 w-12 h-12 rounded-xl flex items-center justify-center">${r.baseIcon}</span>
-                            <div class="flex-1 min-w-0">
-                                <h3 class="text-lg font-bold truncate">${r.name}</h3>
-                                <div class="flex items-center gap-2 mt-1">
-                                    <span class="rank-badge px-2 py-0.5 rounded-full text-xs font-medium flex items-center gap-1">
-                                        <i class="fas fa-lock text-[10px]"></i>${r.rank}
-                                    </span>
-                                    <span class="effect-badge ${diffClass}">${r.difficulty}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            ${r.ingredients.map(i => `
-                                <span class="ingredient-tag px-2 py-1 rounded-lg bg-white/5 text-xs border border-white/10 flex items-center gap-1 hover:bg-white/10 transition-all" title="$${i.price}">
-                                    <span>${i.icon}</span>
-                                    <span class="hidden sm:inline">${i.name}</span>
-                                </span>
-                            `).join('')}
-                        </div>
-
-                        <div class="grid grid-cols-3 gap-2 text-center text-sm mb-4">
-                            <div class="bg-white/5 rounded-lg p-2 hover:bg-white/10 transition-all">
-                                <div class="text-gray-400 text-xs mb-1">Costo</div>
-                                <div class="font-mono font-semibold text-red-400">$${r.cost}</div>
-                            </div>
-                            <div class="bg-white/5 rounded-lg p-2 hover:bg-white/10 transition-all">
-                                <div class="text-gray-400 text-xs mb-1">Venta</div>
-                                <div class="font-mono text-green-400 font-semibold">$${r.sellPrice}</div>
-                            </div>
-                            <div class="bg-white/5 rounded-lg p-2 hover:bg-white/10 transition-all relative overflow-hidden">
-                                <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-100%] hover:translate-x-[100%] transition-transform duration-1000"></div>
-                                <div class="text-gray-400 text-xs mb-1">Ganancia</div>
-                                <div class="font-mono ${profitClass} font-bold text-lg">$${r.profit}</div>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            ${r.effects.slice(0, showDetails ? 8 : 4).map(e => `
-                                <span class="px-2 py-1 rounded-full text-xs bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">${e}</span>
-                            `).join('')}
-                            ${r.effects.length > 4 && !showDetails ? `<span class="px-2 py-1 rounded-full text-xs bg-white/10 text-gray-400">+${r.effects.length - 4}</span>` : ''}
-                        </div>
-
-                        ${showDetails ? `
-                            <div class="mt-4 pt-4 border-t border-white/10 text-sm text-gray-400">
-                                <p>${r.description}</p>
-                                <div class="mt-2 flex items-center gap-4 text-xs">
-                                    <span><i class="fas fa-fire text-orange-400 mr-1"></i>${r.addiction}% adicción</span>
-                                    <span><i class="fas fa-layer-group text-blue-400 mr-1"></i>${r.ingredients.length} ingredientes</span>
-                                </div>
-                            </div>
-                        ` : ''}
-
-                        <div class="flex gap-2 mt-4" onclick="event.stopPropagation()">
-                            <button onclick="toggleFavorite(${r.id})" class="flex-1 py-2 rounded-xl ${isFav ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' : 'bg-white/5 text-gray-400 border border-white/10'} hover:bg-white/10 transition-all text-sm btn-shine">
-                                <i class="fas ${isFav ? 'fa-star' : 'fa-star-o'} mr-2"></i>${isFav ? 'Favorito' : 'Favorito'}
-                            </button>
-                            <button onclick="copyRecipe(${r.id})" class="px-4 py-2 rounded-xl bg-white/5 text-gray-400 border border-white/10 hover:bg-white/10 transition-all text-sm btn-shine tooltip" data-tooltip="Copiar al portapapeles">
-                                <i class="fas fa-copy"></i>
-                            </button>
-                            <button onclick="loadRecipeToCalc(${r.id})" class="px-4 py-2 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 hover:bg-indigo-500/30 transition-all text-sm btn-shine tooltip" data-tooltip="Cargar en calculadora">
-                                <i class="fas fa-calculator"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function filterRecipes(cat) {
-            document.querySelectorAll('.filter-chip').forEach(c => {
-                c.classList.remove('bg-indigo-500/20', 'text-indigo-300', 'border-indigo-500/30');
-                c.classList.add('bg-white/5', 'text-gray-400', 'border-white/10');
-            });
-            const activeChip = document.querySelector(`[data-filter="${cat}"]`);
-            if (activeChip) {
-                activeChip.classList.remove('bg-white/5', 'text-gray-400', 'border-white/10');
-                activeChip.classList.add('bg-indigo-500/20', 'text-indigo-300', 'border-indigo-500/30');
-            }
-            renderRecipes(cat);
-        }
-
-        function searchRecipes() {
-            renderRecipes(currentFilter);
-        }
-
-        function applyFilters() {
-            renderRecipes(currentFilter);
-        }
-
-        function toggleDetails() {
-            showDetails = document.getElementById('show-details').checked;
-            renderRecipes(currentFilter);
-        }
-
-        function resetFilters() {
-            document.getElementById('search-input').value = '';
-            document.getElementById('rank-filter').value = '';
-            filterRecipes('all');
-        }
-
-        function toggleFavorite(id) {
-            if (favorites.includes(id)) {
-                favorites = favorites.filter(f => f !== id);
-                showToast('Eliminado de favoritos');
-            } else {
-                favorites.push(id);
-                showToast('Añadido a favoritos');
-            }
-            localStorage.setItem('s1_favorites', JSON.stringify(favorites));
-            renderRecipes(currentFilter);
-        }
-
-        function copyRecipe(id) {
-            const r = recipes.find(recipe => recipe.id === id);
-            if (!r) return;
-
-            const text = `**${r.name}** (${r.rank})
-Base: ${r.base} ($${r.basePrice})
-Ingredientes: ${r.ingredients.map(i => i.name).join(' → ')}
-Costo: $${r.cost} | Venta: $${r.sellPrice} | Ganancia: $${r.profit}
-Efectos: ${r.effects.join(', ')}
-Adicción: ${r.addiction}%`;
-
-            navigator.clipboard.writeText(text).then(() => {
-                showToast('Receta copiada al portapapeles');
-            });
-        }
-
-        function showRecipeDetails(id) {
-            const r = recipes.find(recipe => recipe.id === id);
-            if (!r) return;
-
-            const modal = document.getElementById('recipe-modal');
-            const content = document.getElementById('modal-body');
-            
-            content.innerHTML = `
-                <div class="flex items-start gap-4 mb-6">
-                    <span class="text-5xl bg-white/5 w-16 h-16 rounded-2xl flex items-center justify-center">${r.baseIcon}</span>
-                    <div class="flex-1">
-                        <h2 class="text-2xl font-bold mb-2">${r.name}</h2>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="rank-badge px-3 py-1 rounded-full text-sm">${r.rank}</span>
-                            <span class="effect-badge difficulty-${r.difficulty.toLowerCase()}">${r.difficulty}</span>
-                            <span class="px-3 py-1 rounded-full text-sm bg-white/5 border border-white/10">${r.type.toUpperCase()}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                    <div class="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-center">
-                        <div class="text-xs text-red-400 mb-1">Inversión</div>
-                        <div class="text-xl font-bold text-red-400 mono">$${r.cost}</div>
-                    </div>
-                    <div class="p-4 rounded-xl bg-green-500/10 border border-green-500/20 text-center">
-                        <div class="text-xs text-green-400 mb-1">Venta</div>
-                        <div class="text-xl font-bold text-green-400 mono">$${r.sellPrice}</div>
-                    </div>
-                    <div class="p-4 rounded-xl bg-yellow-500/10 border border-yellow-500/20 text-center">
-                        <div class="text-xs text-yellow-400 mb-1">Ganancia</div>
-                        <div class="text-xl font-bold text-yellow-400 mono">$${r.profit}</div>
-                    </div>
-                    <div class="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 text-center">
-                        <div class="text-xs text-blue-400 mb-1">ROI</div>
-                        <div class="text-xl font-bold text-blue-400 mono">${Math.round((r.profit/r.cost)*100)}%</div>
-                    </div>
-                </div>
-
-                <div class="mb-6">
-                    <h3 class="text-sm font-semibold text-gray-400 mb-3">Ingredientes (${r.ingredients.length})</h3>
-                    <div class="flex flex-wrap gap-2">
-                        ${r.ingredients.map((i, idx) => `
-                            <div class="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 border border-white/10">
-                                <span class="text-lg">${i.icon}</span>
-                                <div>
-                                    <div class="text-sm font-medium">${i.name}</div>
-                                    <div class="text-xs text-gray-500">$${i.price}</div>
-                                </div>
-                                ${idx < r.ingredients.length - 1 ? '<i class="fas fa-arrow-right text-gray-600 ml-2"></i>' : ''}
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-
-                <div class="mb-6">
-                    <h3 class="text-sm font-semibold text-gray-400 mb-3">Efectos (${r.effects.length})</h3>
-                    <div class="flex flex-wrap gap-2">
-                        ${r.effects.map(e => `
-                            <span class="px-3 py-2 rounded-xl bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-sm">
-                                ${e} <span class="text-xs opacity-70">+${Math.round((effectMultipliers[e] || 0)*100)}%</span>
-                            </span>
-                        `).join('')}
-                    </div>
-                </div>
-
-                <div class="p-4 rounded-xl bg-white/5 border border-white/10 mb-6">
-                    <p class="text-sm text-gray-300 leading-relaxed">${r.description}</p>
-                </div>
-
-                <div class="flex gap-3">
-                    <button onclick="toggleFavorite(${r.id}); closeModal()" class="flex-1 py-3 rounded-xl bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 hover:bg-yellow-500/30 transition-all">
-                        <i class="fas ${favorites.includes(r.id) ? 'fa-star' : 'fa-star-o'} mr-2"></i>${favorites.includes(r.id) ? 'Quitar de favoritos' : 'Añadir a favoritos'}
-                    </button>
-                    <button onclick="loadRecipeToCalc(${r.id}); closeModal()" class="flex-1 py-3 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 hover:bg-indigo-500/30 transition-all">
-                        <i class="fas fa-calculator mr-2"></i>Cargar en calculadora
-                    </button>
-                </div>
-            `;
-
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('modal-content').classList.remove('scale-95', 'opacity-0');
-                document.getElementById('modal-content').classList.add('scale-100', 'opacity-100');
-            }, 10);
-        }
-
-        function closeModal() {
-            const content = document.getElementById('modal-content');
-            content.classList.remove('scale-100', 'opacity-100');
-            content.classList.add('scale-95', 'opacity-0');
-            setTimeout(() => {
-                document.getElementById('recipe-modal').classList.add('hidden');
-            }, 300);
-        }
-
-        function loadRecipeToCalc(id) {
-            const r = recipes.find(recipe => recipe.id === id);
-            if (!r) return;
-
-            calcBase = {name: r.base, cost: r.basePrice, price: r.basePrice, icon: r.baseIcon};
-            calcIngredients = r.ingredients.slice(1).map(i => ({
-                name: i.name,
-                price: i.price,
-                effect: ingredientsData.find(ing => ing.name === i.name)?.effect || '',
-                icon: i.icon
-            }));
-
-            showSection('calculator');
-            initCalculator();
-            updateCalcDisplay();
-            showToast('Receta cargada en calculadora');
-        }
-
-        // ==========================================
-        // CALCULADORA
-        // ==========================================
-        function initCalculator() {
-            const basesContainer = document.getElementById('calc-bases');
-            if (!basesContainer) return;
-
-            const bases = [
-                {name: 'OG Kush', cost: 30, price: 38, icon: '🌿'},
-                {name: 'Sour Diesel', cost: 35, price: 40, icon: '🍃'},
-                {name: 'Green Crack', cost: 40, price: 43, icon: '⚡'},
-                {name: 'Grandaddy Purple', cost: 45, price: 45, icon: '🍇'},
-                {name: 'Meth', cost: 80, price: 70, icon: '💎'},
-                {name: 'Cocaine', cost: 150, price: 150, icon: '❄️'},
-                {name: 'Shrooms', cost: 50, price: 50, icon: '🍄'}
-            ];
-
-            basesContainer.innerHTML = bases.map(b => `
-                <button onclick="selectCalcBase('${b.name}', ${b.cost}, ${b.price}, '${b.icon}')" 
-                        class="calc-base-btn p-4 rounded-xl bg-white/5 border border-white/10 hover:border-indigo-500 hover:bg-indigo-500/10 transition-all text-left relative overflow-hidden group ${calcBase?.name === b.name ? 'border-indigo-500 bg-indigo-500/20' : ''}">
-                    <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">${b.icon}</div>
-                    <div class="text-sm font-medium">${b.name}</div>
-                    <div class="text-xs text-gray-400 mt-1">$${b.cost} → $${b.price}</div>
-                    ${calcBase?.name === b.name ? '<div class="absolute top-2 right-2 w-2 h-2 rounded-full bg-indigo-500"></div>' : ''}
-                </button>
-            `).join('');
-
-            const ingredientsContainer = document.getElementById('calc-ingredients');
-            if (!ingredientsContainer) return;
-
-            ingredientsContainer.innerHTML = ingredientsData.map(i => `
-                <button onclick="addCalcIngredient('${i.name}', ${i.price}, '${i.effect}', '${i.icon}')" 
-                        class="p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-indigo-500/20 hover:border-indigo-500 transition-all text-center group relative ${calcIngredients.length >= 8 ? 'opacity-50 cursor-not-allowed' : ''}">
-                    <div class="text-2xl group-hover:scale-110 transition-transform">${i.icon}</div>
-                    <div class="text-xs mt-1 text-gray-400 group-hover:text-white">$${i.price}</div>
-                    <div class="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-indigo-500 text-[10px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        +
-                    </div>
-                </button>
-            `).join('');
-
-            // Mostrar efectos disponibles
-            const effectsContainer = document.getElementById('available-effects');
-            if (effectsContainer) {
-                const uniqueEffects = [...new Set(ingredientsData.map(i => i.effect))].sort();
-                effectsContainer.innerHTML = uniqueEffects.map(e => `
-                    <span class="text-xs px-2 py-1 rounded-lg bg-white/5 text-gray-400 border border-white/10">${e}</span>
-                `).join('');
-            }
-
-            updateCalcDisplay();
-            updateSavedMixes();
-        }
-
-        function selectCalcBase(name, cost, price, icon) {
-            calcBase = {name, cost, price, icon};
-            calcIngredients = [];
-            initCalculator();
-            updateCalcDisplay();
-            showToast(`Base seleccionada: ${name}`);
-        }
-
-        function addCalcIngredient(name, price, effect, icon) {
-            if (!calcBase) {
-                showToast('Selecciona una base primero', 'error');
-                return;
-            }
-            if (calcIngredients.length >= 8) {
-                showToast('Máximo 8 ingredientes alcanzado', 'error');
-                return;
-            }
-            calcIngredients.push({name, price, effect, icon});
-            document.getElementById('ing-count').textContent = `${calcIngredients.length}/8`;
-            updateCalcDisplay();
-        }
-
-        function removeCalcIngredient(index) {
-            calcIngredients.splice(index, 1);
-            document.getElementById('ing-count').textContent = `${calcIngredients.length}/8`;
-            updateCalcDisplay();
-        }
-
-        function clearCalc() {
-            calcBase = null;
-            calcIngredients = [];
-            document.getElementById('ing-count').textContent = '0/8';
-            initCalculator();
-            showToast('Calculadora limpiada');
-        }
-
-        function updateCalcDisplay() {
-            const stepsContainer = document.getElementById('calc-steps');
-            const costEl = document.getElementById('calc-cost');
-            const sellEl = document.getElementById('calc-sell');
-            const profitEl = document.getElementById('calc-profit');
-            const multiplierEl = document.getElementById('calc-multiplier');
-            const roiEl = document.getElementById('calc-roi');
-            const effectsContainer = document.getElementById('calc-effects');
-
-            if (!calcBase) {
-                if (stepsContainer) stepsContainer.innerHTML = `
-                    <div class="text-center py-8 text-gray-500">
-                        <i class="fas fa-flask text-4xl mb-3 opacity-30"></i>
-                        <p>Selecciona una base para comenzar</p>
-                    </div>
-                `;
-                if (costEl) costEl.textContent = '$0';
-                if (sellEl) sellEl.textContent = '$0';
-                if (profitEl) profitEl.textContent = '$0';
-                if (multiplierEl) multiplierEl.textContent = 'x1.0 base';
-                if (roiEl) roiEl.textContent = '0% ROI';
-                if (effectsContainer) effectsContainer.innerHTML = '<span class="text-xs text-gray-500">Ninguno</span>';
-                return;
-            }
-
-            let totalCost = calcBase.cost;
-            let effects = [];
-            let steps = [];
-
-            // Paso base
-            steps.push(`
-                <div class="p-4 rounded-xl bg-white/5 border border-white/10 flex items-center gap-3">
-                    <span class="text-3xl">${calcBase.icon}</span>
-                    <div class="flex-1">
-                        <div class="font-medium">${calcBase.name}</div>
-                        <div class="text-xs text-gray-400">Base: $${calcBase.cost} → $${calcBase.price}</div>
-                    </div>
-                    <span class="text-xs text-gray-500">Paso 1</span>
-                </div>
-            `);
-
-            calcIngredients.forEach((ing, idx) => {
-                totalCost += ing.price;
-                if (!effects.includes(ing.effect)) effects.push(ing.effect);
-
-                steps.push(`
-                    <div class="p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/30 relative group">
-                        <button onclick="removeCalcIngredient(${idx})" class="absolute top-2 right-2 w-6 h-6 rounded-full bg-red-500/20 text-red-400 hover:bg-red-500/30 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100">
-                            <i class="fas fa-times text-xs"></i>
-                        </button>
-                        <div class="flex items-center gap-3">
-                            <span class="text-2xl">${ing.icon}</span>
-                            <div class="flex-1">
-                                <div class="text-sm font-medium">${ing.name}</div>
-                                <div class="text-xs text-indigo-300">+${ing.effect}</div>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-xs text-gray-400">$${ing.price}</div>
-                                <div class="text-xs text-gray-500">Paso ${idx + 2}</div>
-                            </div>
-                        </div>
-                    </div>
-                `);
-            });
-
-            // Calcular multiplicador
-            let multiplier = 1;
-            effects.forEach(e => {
-                if (effectMultipliers[e]) multiplier += effectMultipliers[e];
-            });
-
-            const sellPrice = Math.round(calcBase.price * multiplier);
-            const profit = sellPrice - totalCost;
-            const roi = totalCost > 0 ? Math.round((profit / totalCost) * 100) : 0;
-
-            if (stepsContainer) stepsContainer.innerHTML = steps.join('');
-            if (costEl) costEl.textContent = '$' + totalCost;
-            if (sellEl) sellEl.textContent = '$' + sellPrice;
-            if (profitEl) {
-                profitEl.textContent = '$' + profit;
-                profitEl.className = `text-3xl font-bold mono ${profit > 0 ? 'profit-gold' : 'text-red-400'}`;
-            }
-            if (multiplierEl) multiplierEl.textContent = `x${multiplier.toFixed(2)} multiplicador`;
-            if (roiEl) roiEl.textContent = `${roi}% ROI`;
-            
-            if (effectsContainer) {
-                if (effects.length === 0) {
-                    effectsContainer.innerHTML = '<span class="text-xs text-gray-500">Ninguno</span>';
-                } else {
-                    effectsContainer.innerHTML = effects.map(e => `
-                        <span class="px-2 py-1 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs">
-                            ${e} +${Math.round((effectMultipliers[e] || 0)*100)}%
-                        </span>
-                    `).join('');
-                }
-            }
-        }
-
-        function saveMix() {
-            if (!calcBase || calcIngredients.length === 0) {
-                showToast('No hay mezcla para guardar', 'error');
-                return;
-            }
-
-            let totalCost = calcBase.cost;
-            let effects = [];
-            calcIngredients.forEach(i => {
-                totalCost += i.price;
-                if (!effects.includes(i.effect)) effects.push(i.effect);
-            });
-
-            let multiplier = 1;
-            effects.forEach(e => {
-                if (effectMultipliers[e]) multiplier += effectMultipliers[e];
-            });
-
-            const sellPrice = Math.round(calcBase.price * multiplier);
-            const profit = sellPrice - totalCost;
-
-            const mix = {
-                id: Date.now(),
-                name: `Mezcla ${savedMixes.length + 1}`,
-                base: calcBase,
-                ingredients: [...calcIngredients],
-                cost: totalCost,
-                sellPrice: sellPrice,
-                profit: profit,
-                effects: effects,
-                date: new Date().toLocaleString()
-            };
-
-            savedMixes.unshift(mix);
-            localStorage.setItem('s1_mixes', JSON.stringify(savedMixes));
-            updateSavedMixes();
-            showToast('Mezcla guardada');
-        }
-
-        function updateSavedMixes() {
-            const container = document.getElementById('saved-mixes');
-            if (!container) return;
-
-            if (savedMixes.length === 0) {
-                container.innerHTML = '<p class="text-xs text-gray-500 text-center py-4">No hay mezclas guardadas</p>';
-                return;
-            }
-
-            container.innerHTML = savedMixes.map(mix => `
-                <div class="p-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all cursor-pointer group" onclick="loadMix(${mix.id})">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-sm font-medium">${mix.name}</span>
-                        <button onclick="deleteMix(${mix.id}, event)" class="text-red-400 hover:text-red-300 opacity-0 group-hover:opacity-100 transition-all">
-                            <i class="fas fa-trash text-xs"></i>
-                        </button>
-                    </div>
-                    <div class="flex items-center gap-2 text-xs text-gray-400 mb-2">
-                        <span>${mix.base.icon} ${mix.base.name}</span>
-                        <span>•</span>
-                        <span>${mix.ingredients.length} ingredientes</span>
-                    </div>
-                    <div class="flex items-center justify-between text-xs">
-                        <span class="text-yellow-400 font-mono">$${mix.profit}</span>
-                        <span class="text-gray-500">${mix.effects.length} efectos</span>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function loadMix(id) {
-            const mix = savedMixes.find(m => m.id === id);
-            if (!mix) return;
-
-            calcBase = mix.base;
-            calcIngredients = [...mix.ingredients];
-            document.getElementById('ing-count').textContent = `${calcIngredients.length}/8`;
-            initCalculator();
-            updateCalcDisplay();
-            showToast('Mezcla cargada');
-        }
-
-        function deleteMix(id, event) {
-            event.stopPropagation();
-            savedMixes = savedMixes.filter(m => m.id !== id);
-            localStorage.setItem('s1_mixes', JSON.stringify(savedMixes));
-            updateSavedMixes();
-            showToast('Mezcla eliminada');
-        }
-
-        // ==========================================
-        // OPTIMIZADOR
-        // ==========================================
-        function setBudget(amount) {
-            document.getElementById('budget-input').value = amount;
-            optimizeBudget();
-        }
-
-        function optimizeBudget() {
-            const budgetInput = document.getElementById('budget-input');
-            const resultDiv = document.getElementById('optimizer-result');
-
-            if (!budgetInput || !resultDiv) return;
-
-            const budget = parseInt(budgetInput.value);
-            if (!budget || budget <= 0) {
-                showToast('Ingresa un presupuesto válido', 'error');
-                return;
-            }
-
-            const affordable = recipes.filter(r => r.cost <= budget).sort((a, b) => b.profit - a.profit);
-
-            resultDiv.classList.remove('hidden');
-
-            if (affordable.length === 0) {
-                resultDiv.innerHTML = `
-                    <div class="glass-card rounded-2xl p-6 border-red-500/20 bg-red-500/10 text-center">
-                        <i class="fas fa-exclamation-circle text-red-400 text-3xl mb-3"></i>
-                        <p class="text-red-400">No hay recetas disponibles para $${budget}</p>
-                        <p class="text-sm text-gray-400 mt-2">La receta más barata cuesta $${Math.min(...recipes.map(r => r.cost))}</p>
-                    </div>
-                `;
-                return;
-            }
-
-            const best = affordable[0];
-            const roi = Math.round((best.profit / best.cost) * 100);
-            const alternatives = affordable.slice(1, 4);
-
-            resultDiv.innerHTML = `
-                <div class="glass-card rounded-2xl p-6 border-2 border-green-500/30 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-green-500/10 rounded-full blur-3xl"></div>
-                    
-                    <div class="relative z-10">
-                        <div class="flex items-center justify-between mb-6">
-                            <div class="flex items-center gap-3">
-                                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-                                    <i class="fas fa-trophy text-white text-xl"></i>
-                                </div>
-                                <div>
-                                    <h3 class="text-lg font-bold text-green-400">Mejor opción para $${budget}</h3>
-                                    <p class="text-sm text-gray-400">ROI de ${roi}%</p>
-                                </div>
-                            </div>
-                            <span class="text-3xl">${best.baseIcon}</span>
-                        </div>
-
-                        <div class="mb-6">
-                            <h4 class="text-xl font-bold mb-2">${best.name}</h4>
-                            <div class="flex items-center gap-2 text-sm text-gray-400">
-                                <span class="rank-badge px-2 py-1 rounded-full text-xs">${best.rank}</span>
-                                <span>•</span>
-                                <span>${best.base}</span>
-                                <span>•</span>
-                                <span class="effect-badge difficulty-${best.difficulty.toLowerCase()}">${best.difficulty}</span>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            ${best.ingredients.map(i => `
-                                <span class="px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-sm flex items-center gap-2">
-                                    ${i.icon} ${i.name}
-                                </span>
-                            `).join('')}
-                        </div>
-
-                        <div class="grid grid-cols-4 gap-3 mb-6">
-                            <div class="p-3 rounded-xl bg-white/5 text-center">
-                                <div class="text-xs text-gray-400 mb-1">Costo</div>
-                                <div class="font-mono font-semibold">$${best.cost}</div>
-                            </div>
-                            <div class="p-3 rounded-xl bg-white/5 text-center">
-                                <div class="text-xs text-gray-400 mb-1">Venta</div>
-                                <div class="font-mono text-green-400 font-semibold">$${best.sellPrice}</div>
-                            </div>
-                            <div class="p-3 rounded-xl bg-white/5 text-center">
-                                <div class="text-xs text-gray-400 mb-1">Ganancia</div>
-                                <div class="font-mono text-yellow-400 font-bold text-lg">$${best.profit}</div>
-                            </div>
-                            <div class="p-3 rounded-xl bg-white/5 text-center">
-                                <div class="text-xs text-gray-400 mb-1">Adicción</div>
-                                <div class="font-mono text-orange-400 font-semibold">${best.addiction}%</div>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-wrap gap-2 mb-6">
-                            ${best.effects.map(e => `
-                                <span class="px-2 py-1 rounded-full text-xs bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">${e}</span>
-                            `).join('')}
-                        </div>
-
-                        <button onclick="loadRecipeToCalc(${best.id})" class="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl font-semibold hover:shadow-lg hover:shadow-green-500/50 transition-all btn-shine">
-                            <i class="fas fa-calculator mr-2"></i>Cargar en calculadora
-                        </button>
-                    </div>
-                </div>
-
-                ${alternatives.length > 0 ? `
-                    <div class="mt-4">
-                        <h4 class="text-sm font-semibold text-gray-400 mb-3">Alternativas recomendadas:</h4>
-                        <div class="space-y-2">
-                            ${alternatives.map(alt => `
-                                <div class="glass-card rounded-xl p-4 flex items-center justify-between cursor-pointer hover:bg-white/5 transition-all" onclick="loadRecipeToCalc(${alt.id})">
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-2xl">${alt.baseIcon}</span>
-                                        <div>
-                                            <div class="font-medium">${alt.name}</div>
-                                            <div class="text-xs text-gray-400">${alt.rank}</div>
-                                        </div>
-                                    </div>
-                                    <div class="text-right">
-                                        <div class="text-green-400 font-mono font-semibold">$${alt.profit}</div>
-                                        <div class="text-xs text-gray-500">${Math.round((alt.profit/alt.cost)*100)}% ROI</div>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                ` : ''}
-            `;
-        }
-
-        // ==========================================
-        // LABORATORIO (NUEVO)
-        // ==========================================
-        function initLab() {
-            const container = document.getElementById('effect-lab');
-            if (!container) return;
-
-            const topEffects = Object.entries(effectMultipliers)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 8);
-
-            container.innerHTML = topEffects.map(([effect, multiplier]) => `
-                <button onclick="showEffectTree('${effect}')" class="p-4 rounded-xl bg-white/5 border border-white/10 hover:border-indigo-500 hover:bg-indigo-500/10 transition-all text-center group">
-                    <div class="text-lg font-bold text-indigo-400 mb-1">+${Math.round(multiplier*100)}%</div>
-                    <div class="text-xs text-gray-400 group-hover:text-white">${effect}</div>
-                </button>
-            `).join('');
-
-            // Ingredientes y precios
-            const pricesContainer = document.getElementById('ingredient-prices');
-            if (pricesContainer) {
-                pricesContainer.innerHTML = ingredientsData.map(i => `
-                    <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-all">
-                        <div class="flex items-center gap-3">
-                            <span class="text-xl">${i.icon}</span>
-                            <div>
-                                <div class="text-sm font-medium">${i.name}</div>
-                                <div class="text-xs text-gray-400">${i.effect}</div>
-                            </div>
-                        </div>
-                        <div class="text-sm font-mono text-gray-400">$${i.price}</div>
-                    </div>
-                `).join('');
-            }
-        }
-
-        function showEffectTree(effect) {
-            const container = document.getElementById('effect-tree');
-            if (!container) return;
-
-            const ing = ingredientsData.find(i => i.effect === effect);
-            
-            if (!ing) {
-                container.innerHTML = `<p class="text-gray-500">No hay ingrediente directo para ${effect}</p>`;
-                return;
-            }
-
-            // Encontrar recetas que usen este efecto
-            const recipesWithEffect = recipes.filter(r => r.effects.includes(effect)).slice(0, 5);
-
-            container.innerHTML = `
-                <div class="p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/30 mb-4">
-                    <div class="flex items-center gap-3 mb-2">
-                        <span class="text-2xl">${ing.icon}</span>
-                        <div>
-                            <div class="font-bold text-indigo-400">${effect}</div>
-                            <div class="text-sm text-gray-400">Otorgado por ${ing.name} ($${ing.price})</div>
-                        </div>
-                    </div>
-                    <div class="text-xs text-gray-500 mt-2">
-                        Multiplicador: +${Math.round((effectMultipliers[effect] || 0)*100)}%
-                    </div>
-                </div>
-
-                <div class="text-sm font-semibold text-gray-400 mb-2">Recetas que usan este efecto:</div>
-                <div class="space-y-2">
-                    ${recipesWithEffect.map(r => `
-                        <div class="p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-all cursor-pointer" onclick="showRecipeDetails(${r.id})">
-                            <div class="flex items-center justify-between">
-                                <span class="font-medium">${r.name}</span>
-                                <span class="text-yellow-400 font-mono text-sm">$${r.profit}</span>
-                            </div>
-                            <div class="text-xs text-gray-500 mt-1">
-                                ${r.ingredients.filter(i => i.name === ing.name).length}x ${ing.name}
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-        }
-
-        // ==========================================
-        // GRÁFICOS
-        // ==========================================
-        function initChart() {
-            const ctx = document.getElementById('profitChart');
-            if (!ctx) return;
-
-            if (window.profitChart) {
-                window.profitChart.destroy();
-            }
-
-            const data = {
-                labels: ['OG Kush', 'Sour Diesel', 'Green Crack', 'Grandaddy P', 'Meth', 'Cocaine', 'Shrooms'],
-                datasets: [{
-                    label: 'Ganancia Máxima ($)',
-                    data: [112, 97, 64, 62, 222, 565, 49],
-                    backgroundColor: [
-                        'rgba(34,197,94,0.6)',
-                        'rgba(34,197,94,0.6)',
-                        'rgba(34,197,94,0.6)',
-                        'rgba(34,197,94,0.6)',
-                        'rgba(59,130,246,0.6)',
-                        'rgba(234,179,8,0.6)',
-                        'rgba(168,85,247,0.6)'
-                    ],
-                    borderColor: [
-                        'rgb(34,197,94)',
-                        'rgb(34,197,94)',
-                        'rgb(34,197,94)',
-                        'rgb(34,197,94)',
-                        'rgb(59,130,246)',
-                        'rgb(234,179,8)',
-                        'rgb(168,85,247)'
-                    ],
-                    borderWidth: 2,
-                    borderRadius: 8,
-                    borderSkipped: false
-                }]
-            };
-
-            window.profitChart = new Chart(ctx, {
-                type: 'bar',
-                data: data,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: 'rgba(0,0,0,0.9)',
-                            titleColor: '#fff',
-                            bodyColor: '#fff',
-                            borderColor: 'rgba(255,255,255,0.1)',
-                            borderWidth: 1,
-                            padding: 12,
-                            displayColors: false,
-                            callbacks: {
-                                label: function(context) {
-                                    return 'Ganancia: $' + context.parsed.y;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: { color: 'rgba(255,255,255,0.05)' },
-                            ticks: { 
-                                color: 'rgba(255,255,255,0.5)',
-                                callback: function(value) {
-                                    return '$' + value;
-                                }
-                            }
-                        },
-                        x: {
-                            grid: { display: false },
-                            ticks: { color: 'rgba(255,255,255,0.5)' }
-                        }
-                    },
-                    animation: {
-                        duration: 1000,
-                        easing: 'easeOutQuart'
-                    }
-                }
-            });
-        }
-
-        // ==========================================
-        // UTILIDADES
-        // ==========================================
-        function showToast(message, type = 'success') {
-            const toast = document.getElementById('toast');
-            const messageEl = document.getElementById('toast-message');
-            
-            messageEl.textContent = message;
-            toast.className = `fixed bottom-4 right-4 z-50 transform transition-all duration-300 ${
-                type === 'error' 
-                    ? 'bg-red-500/10 border-red-500/20 text-red-400' 
-                    : 'bg-green-500/10 border-green-500/20 text-green-400'
-            } glass-card rounded-xl px-6 py-3 flex items-center gap-3 border`;
-            
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            
-            setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
-        }
-
-        function updateStats() {
-            const totalProfit = recipes.reduce((a, b) => a + b.profit, 0);
-            const avgProfit = Math.round(totalProfit / recipes.length);
-            const bestProfit = Math.max(...recipes.map(r => r.profit));
-            
-            document.getElementById('total-recipes').textContent = recipes.length;
-            document.getElementById('avg-profit').textContent = '$' + avgProfit;
-            document.getElementById('best-profit').textContent = '$' + bestProfit;
-        }
-
-        function loadRecentActivity() {
-            const container = document.getElementById('recent-activity');
-            if (!container) return;
-
-            const activities = [
-                { icon: 'fa-flask', text: 'Nueva receta añadida: Cocaine MEGA PROFIT', time: 'Hace 2 horas', color: 'text-yellow-400' },
-                { icon: 'fa-chart-line', text: 'Actualización de multiplicadores', time: 'Hace 5 horas', color: 'text-green-400' },
-                { icon: 'fa-bug', text: 'Fix: Cálculo de adicción corregido', time: 'Hace 1 día', color: 'text-red-400' },
-                { icon: 'fa-plus', text: 'Nueva función: Laboratorio de efectos', time: 'Hace 2 días', color: 'text-indigo-400' }
-            ];
-
-            container.innerHTML = activities.map(a => `
-                <div class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-all">
-                    <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center ${a.color}">
-                        <i class="fas ${a.icon} text-sm"></i>
-                    </div>
-                    <div class="flex-1">
-                        <div class="text-sm">${a.text}</div>
-                        <div class="text-xs text-gray-500">${a.time}</div>
-                    </div>
-                </div>
-            `).join('');
+        function animateCounter(id, target) {
+            let current = 0;
+            const element = document.getElementById(id);
+            const interval = setInterval(() => {
+                current += 1;
+                element.textContent = current;
+                if (current >= target) clearInterval(interval);
+            }, 50);
         }
 
         function toggleTheme() {
-            // Placeholder para tema oscuro/claro
-            showToast('Tema alternado (placeholder)');
+            document.documentElement.classList.toggle('dark');
         }
 
-        function exportData() {
-            const data = {
-                recipes: recipes,
-                favorites: favorites,
-                savedMixes: savedMixes,
-                stats: {
-                    total: recipes.length,
-                    avgProfit: Math.round(recipes.reduce((a,b) => a + b.profit, 0) / recipes.length),
-                    bestProfit: Math.max(...recipes.map(r => r.profit))
-                },
-                exportDate: new Date().toISOString()
-            };
-            
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'schedule1-data.json';
-            a.click();
-            URL.revokeObjectURL(url);
-            
-            showToast('Datos exportados');
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
         }
 
-        function loadMore() {
-            showToast('No hay más recetas para cargar');
-        }
-
-        // Atajo de teclado
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.key === 'e') {
-                e.preventDefault();
-                exportData();
-            }
-            if (e.key === 'Escape') {
-                closeModal();
-            }
-        });
-
-        // Service Worker para PWA (opcional)
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('data:text/javascript,').catch(() => {
-                // Silenciar error
+        function showSection(sectionId) {
+            // Hide all sections
+            ['hero', 'study', 'practice', 'compare', 'quiz'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
             });
+            
+            // Show target
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+            
+            // Refresh icons
+            setTimeout(() => lucide.createIcons(), 100);
         }
+
+        function switchTab(tabName) {
+            // Update buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('tab-active');
+            });
+            document.getElementById(`tab-${tabName}`).classList.add('tab-active');
+            
+            // Load content
+            const content = document.getElementById('study-content');
+            const data = studyData[tabName];
+            
+            let html = `
+                <div class="animate-slide-up">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-16 h-16 rounded-2xl bg-${data.color}-100 dark:bg-${data.color}-900/30 flex items-center justify-center text-3xl">
+                            ${tabName === 'procariota' ? '🦠' : tabName === 'animal' ? '🐕' : tabName === 'vegetal' ? '🌱' : '🔬'}
+                        </div>
+                        <div>
+                            <h3 class="text-3xl font-bold text-${data.color}-600 dark:text-${data.color}-400">${data.title}</h3>
+                            <p class="text-slate-600 dark:text-slate-400">${data.description}</p>
+                        </div>
+                    </div>
+            `;
+            
+            if (data.structures) {
+                html += `<div class="grid md:grid-cols-2 gap-4">`;
+                data.structures.forEach((item, index) => {
+                    html += `
+                        <div class="glass rounded-xl p-4 hover:scale-105 transition-transform cursor-pointer group border-l-4 border-${data.color}-400" onclick="toggleDetail(this)">
+                            <div class="flex items-start gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-${data.color}-100 dark:bg-${data.color}-900/30 flex items-center justify-center shrink-0">
+                                    <i data-lucide="${item.icon}" class="w-5 h-5 text-${data.color}-600 dark:text-${data.color}-400"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold mb-1 group-hover:text-${data.color}-600 transition-colors">${item.name}</h4>
+                                    <p class="text-sm text-slate-600 dark:text-slate-400 detail-text hidden">${item.desc}</p>
+                                    <span class="text-xs text-${data.color}-600 dark:text-${data.color}-400 mt-2 inline-block">Haz clic para ver más</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            }
+            
+            if (data.exclusive) {
+                html += `<div class="mt-8"><h4 class="text-xl font-bold mb-4 text-${data.color}-600 dark:text-${data.color}-400">Estructuras Exclusivas</h4><div class="grid md:grid-cols-2 gap-4">`;
+                data.exclusive.forEach(item => {
+                    html += `
+                        <div class="glass rounded-xl p-4 border-2 border-${data.color}-200 dark:border-${data.color}-800">
+                            <div class="flex items-center gap-3 mb-2">
+                                <i data-lucide="${item.icon}" class="w-6 h-6 text-${data.color}-600 dark:text-${data.color}-400"></i>
+                                <h4 class="font-bold">${item.name}</h4>
+                            </div>
+                            <p class="text-sm text-slate-600 dark:text-slate-400">${item.desc}</p>
+                        </div>
+                    `;
+                });
+                html += `</div></div>`;
+            }
+            
+            html += `</div>`;
+            content.innerHTML = html;
+            lucide.createIcons();
+        }
+
+        function toggleDetail(element) {
+            const detail = element.querySelector('.detail-text');
+            const hint = element.querySelector('span');
+            detail.classList.toggle('hidden');
+            hint.textContent = detail.classList.contains('hidden') ? 'Haz clic para ver más' : 'Haz clic para ocultar';
+        }
+
+        // Flashcard functions
+        function flipCard() {
+            document.getElementById('flashcard-container').classList.toggle('flipped');
+        }
+
+        function updateFlashcard() {
+            const card = flashcards[currentFlashcard];
+            document.getElementById('card-front').textContent = card.front;
+            document.getElementById('card-back').textContent = card.back;
+            document.getElementById('flashcard-count').textContent = `${currentFlashcard + 1}/${flashcards.length}`;
+            document.getElementById('flashcard-progress').style.width = `${((currentFlashcard + 1) / flashcards.length) * 100}%`;
+            
+            // Reset flip
+            document.getElementById('flashcard-container').classList.remove('flipped');
+        }
+
+        function nextCard() {
+            if (currentFlashcard < flashcards.length - 1) {
+                currentFlashcard++;
+                updateFlashcard();
+            } else {
+                currentFlashcard = 0;
+                updateFlashcard();
+            }
+        }
+
+        function prevCard() {
+            if (currentFlashcard > 0) {
+                currentFlashcard--;
+                updateFlashcard();
+            } else {
+                currentFlashcard = flashcards.length - 1;
+                updateFlashcard();
+            }
+        }
+
+        function shuffleCards() {
+            flashcards.sort(() => Math.random() - 0.5);
+            currentFlashcard = 0;
+            updateFlashcard();
+        }
+
+        // Quiz functions
+        function loadQuestion() {
+            const q = quizQuestions[currentQuiz];
+            document.getElementById('current-question').textContent = currentQuiz + 1;
+            document.getElementById('total-questions').textContent = quizQuestions.length;
+            document.getElementById('quiz-progress').style.width = `${((currentQuiz + 1) / quizQuestions.length) * 100}%`;
+            document.getElementById('question-text').textContent = q.question;
+            document.getElementById('explanation').classList.add('hidden');
+            document.getElementById('next-question-btn').classList.add('hidden');
+            
+            const optionsHtml = q.options.map((opt, idx) => `
+                <button onclick="selectOption(${idx})" class="quiz-option w-full text-left p-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 hover:border-teal-400 dark:hover:border-teal-500 font-medium" data-index="${idx}">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-sm font-bold">${String.fromCharCode(65 + idx)}</div>
+                        <span>${opt}</span>
+                    </div>
+                </button>
+            `).join('');
+            
+            document.getElementById('options-container').innerHTML = optionsHtml;
+            answered = false;
+        }
+
+        function selectOption(index) {
+            if (answered) return;
+            answered = true;
+            
+            const q = quizQuestions[currentQuiz];
+            const options = document.querySelectorAll('.quiz-option');
+            
+            options.forEach((opt, idx) => {
+                if (idx === q.correct) {
+                    opt.classList.add('correct');
+                } else if (idx === index && idx !== q.correct) {
+                    opt.classList.add('incorrect');
+                }
+                opt.style.pointerEvents = 'none';
+            });
+            
+            if (index === q.correct) score++;
+            
+            document.getElementById('score-display').textContent = `Puntuación: ${score}`;
+            document.getElementById('explanation-text').textContent = q.explanation;
+            document.getElementById('explanation').classList.remove('hidden');
+            document.getElementById('next-question-btn').classList.remove('hidden');
+            
+            if (currentQuiz === quizQuestions.length - 1) {
+                document.getElementById('next-question-btn').textContent = 'Ver Resultados';
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuiz < quizQuestions.length - 1) {
+                currentQuiz++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('quiz-results').classList.remove('hidden');
+            document.getElementById('final-score').textContent = `${score}/${quizQuestions.length}`;
+            
+            const percentage = (score / quizQuestions.length) * 100;
+            let message = '';
+            if (percentage >= 90) message = '¡Excelente! Dominas el tema 🎉';
+            else if (percentage >= 70) message = '¡Muy bien! Casi listo para la prueba 👍';
+            else if (percentage >= 50) message = 'Bien, pero necesitas repasar más 📚';
+            else message = 'Necesitas estudiar más. ¡Tú puedes! 💪';
+            
+            document.getElementById('result-message').textContent = message;
+        }
+
+        function restartQuiz() {
+            currentQuiz = 0;
+            score = 0;
+            document.getElementById('score-display').textContent = 'Puntuación: 0';
+            document.getElementById('quiz-container').classList.remove('hidden');
+            document.getElementById('quiz-results').classList.add('hidden');
+            document.getElementById('next-question-btn').textContent = 'Siguiente Pregunta';
+            loadQuestion();
+        }
+
+        // Initialize quiz when section shown
+        const originalShowSection = showSection;
+        showSection = function(sectionId) {
+            originalShowSection(sectionId);
+            if (sectionId === 'quiz' && currentQuiz === 0 && score === 0) {
+                loadQuestion();
+            }
+        };
+
+        // Typing effect for hero
+        const heroTexts = [
+            "Domina la estructura y función celular...",
+            "Aprende sobre procariotas y eucariotas...",
+            "Prepara tu prueba de biología...",
+            "¡La mejor guía para 2° Medio!"
+        ];
+        let textIndex = 0;
+        setInterval(() => {
+            textIndex = (textIndex + 1) % heroTexts.length;
+            const element = document.getElementById('hero-text');
+            element.style.opacity = 0;
+            setTimeout(() => {
+                element.textContent = heroTexts[textIndex];
+                element.style.opacity = 1;
+            }, 300);
+        }, 4000);
     </script>
 </body>
 </html>
